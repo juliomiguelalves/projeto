@@ -37,10 +37,12 @@ app.use(logger('dev'));
 
 passport.use('signup',new LocalStrategy(
   {usernameField:'email'},(email,password,done) => {
+    console.log("hello")
     User.consultar(email)
       .then(dados =>{
         if(dados) return done(null,{strat:'signup',success:false,message:'Email já existe!\n'})
         else{
+          console.log("está aqui")
           User.inserir({
             email,password,nivel:"produtor",nome:req.body.nome
           })

@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 });
 
 // login de utilizador
-router.post('/signup', function(req, res) {
+router.post('/signup',passport.authenticate('signup'), function(req, res) {
   /*if (req.user.success) {
     jwt.sign({
       email: req.user.user.email, 
@@ -24,11 +24,7 @@ router.post('/signup', function(req, res) {
       function(e, token) {
         if(e) res.status(500).jsonp({error: "Erro na geração do token: " + e}) 
         else res.status(201).jsonp({token})
-    })*/
-    console.log(req.body)
-    User.inserir(req.body)
-      .then(dados => res.status(201).jsonp({dados}))
-      .catch(erro => res.status(501).jsonp({erro}))
+    })
  // }
  // else res.status(201).jsonp({error:"ERRO"}) 
 })
