@@ -16,7 +16,7 @@ router.get('/signup', function(req, res) {
 
 
 router.post('/signup', function(req, res) {
-  console.log("estou aqui")
+  console.log("estou no post")
   axios.post('http://localhost:8002/users/', req.body)
     .then(dados => {
       res.cookie('token', dados.data.token, {
@@ -37,23 +37,10 @@ router.post('/login', function(req, res) {
         secure: false, // set to true if your using https
         httpOnly: true
       });
-      res.redirect('/tarefas')
+      res.redirect('/')
     })
     .catch(e => res.render('error', {error: e}))
 });
 
-router.get('/tarefas', function(req, res) {
-  console.log(JSON.stringify(req.cookies))
-  axios.get('http://localhost:8001/tarefas?token=' + req.cookies.token)
-    .then(dados => res.render('tarefas', {lista: dados.data}))
-    .catch(e => res.render('error', {error: e}))
-});
-
-
-router.get('/tarefas/remover/:id',function(req,res){
-  axios.delete("http://localhost:8001/tarefas/"+req.params.id+'?token='+req.cookies.token)
-      .then(dados => res.redirect('/tarefas'))
-      .catch(erro => res.render('error',{error:erro}))
-})
 
 module.exports = router;

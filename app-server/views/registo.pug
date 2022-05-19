@@ -1,13 +1,21 @@
 extends layout 
 
 block content   
-    div(id="signup_modal" class="my-modal")
-        .w3-container.w3-margin.w3-border 
-            .w3-container.w3-blue 
+    h2 Repositório de materiais didáticos
+    .w3-bar
+        a(href="/") Home
+    div(id="signup_form")
+        .w3-container.w3-margin.w3-border.w3-indigo
+            .w3-container
                 h3 Introduza as suas credenciais: 
             form.w3-container(action='/users/signup' method='POST')
                 label Nome: 
-                input.w3-input(type='text' name="nome")          
+                input.w3-input(type='text' name="nome")
+                label Nivel: 
+                select.w3-select(name="nivel")
+                    option(value="Administrador") Administrador
+                    option(value="Produtor") Produtor
+                    option(value="Consumidor") Consumidor    
                 label Email: 
                 input.w3-input(type='text' name="email")
                 label Password: 

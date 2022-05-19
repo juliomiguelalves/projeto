@@ -18,12 +18,12 @@ db.once('open', function() {
   console.log("Conexão ao MongoDB realizada com sucesso...")
 });
 
-var User = require('./controllers/user')
+var UserControl = require('./controllers/user')
 
 // Configuração da estratégia local
-passport.use(new LocalStrategy(
-  {usernameField: 'username'}, (username, password, done) => {
-    User.consultar(username)
+passport.use('login',new LocalStrategy(
+  {usernameField: 'email'}, (email, password, done) => {
+    UserControl.consultar(email)
       .then(dados => {
         const user = dados
         if(!user) { return done(null, false, {message: 'Utilizador inexistente!\n'})}
@@ -34,18 +34,48 @@ passport.use(new LocalStrategy(
     })
 )
 
+passport.use('signup-auth', new LocalStrategy(
+  {usernameField: 'email', passReqToCallback: true}, 
+  (req, email, password, done) => {
+    console.log(req.body)
+    UserControl.consultar(email)
+      .then(dados => {
+        console.log(dados)
+        if (dados) return done(null, {strat: 'signup-auth', success: false, invalidInput: 'email', message: 'Email já existe!\n'})
+        else {
+          UserControl.inserir(req.body)
+            .then(dados => {
+              console.log(dados)
+              return done(null, {strat: 'signup-auth', success: true, user: dados})
+            })
+            .catch(e => done(e))
+        }
+      })
+      .catch(e => done(e))
+    })
+)
+
 // Indica-se ao passport como serializar o utilizador
 passport.serializeUser((user,done) => {
-  console.log('Serielização, uname: ' + user.username)
-  done(null, user.username)
+  if (user.success) {
+    console.log('Serialização, email: ' + user.user.email)
+    done(null, {strat: user.strat, success: user.success, email: user.user.email})
+  }
+  else done(null, user)
 })
   
 // Desserialização: a partir do id obtem-se a informação do utilizador
-passport.deserializeUser((uname, done) => {
-  console.log('Desserielização, username: ' + uname)
-  User.consultar(uname)
-    .then(dados => done(null, dados))
-    .catch(erro => done(erro, false))
+passport.deserializeUser((user, done) => {
+  if (user.success) {
+    console.log('Desserialização, email: ' + user.email)
+    UserControl.consultar(user.email)
+      .then(dados => done(null, {success: true, ...dados}))
+      .catch(erro => done(erro, false))
+  }
+  else {
+    delete user.strat
+    done(null, user)
+  }
 })
   
 var usersRouter = require('./routes/user');

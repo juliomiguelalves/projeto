@@ -6,26 +6,25 @@ var User = require('../models/user')
 module.exports.listar = () => {
     return User
         .find()
-        .sort('username')
+        .sort('email')
         .exec()
 }
 
-module.exports.consultar = uname => {
+module.exports.consultar = mail => {
     return User
-        .findOne({username: uname})
+        .findOne({email: mail})
         .exec()
 }
 
 module.exports.inserir = u => {
-    console.log("estou aqui")
     var novo = new User(u)
     return novo.save()
 }
 
-module.exports.remover = function(uname){
-    return User.deleteOne({username: uname})
+module.exports.remover = function(mail){
+    return User.deleteOne({email: mail})
 }
 
 module.exports.alterar = function(u){
-    return User.findByIdAndUpdate({username: u.username}, u, {new: true})
+    return User.findByIdAndUpdate({email: u.email}, u, {new: true})
 }
