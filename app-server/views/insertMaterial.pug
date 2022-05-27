@@ -1,0 +1,31 @@
+extends layout 
+
+block content 
+
+    form(id="myForm" class="my-modal-content" style="width: 60%" action="/materiais/upload" method="POST" enctype="multipart/form-data")    
+        h2(style="margin: 10px 20px 20px 20px") Adicionar Recurso
+        Label Titulo
+        input(type="text" name="titulo" required)
+        Label Tipo
+        input(type="text" name="tipo" required)
+        Label Data de criação 
+        input(type="date" name="dataCriacao" required style="margin-bottom: 20px")
+        Label Descrição
+        input(type="text" name="descricao" required)
+        table(id="ficheiros-upload" class="w3-table-all" style="margin-bottom: 20px")
+            tr 
+                th Nome 
+                th Tamanho 
+                th Tipo 
+            tr(id=`linha0` class="nova")
+                th(class="nome")
+                th(class="tamanho")
+                th(class="tipo")
+                th 
+                    input(hidden name="checksum0" value="")
+                    button(class="adicionar" type="button" onclick=`adicionarFicheiro(0,'upload')`) &#10133;
+                    input(name="material" type="file" id=`novoFicheiro0` onchange=`getChecksum(this,0)` style="display: none")
+                    button(class="remover" type="button" style="color: red; display: none" onclick=`removerFicheiro('linha0', 'upload')`) &#10006;
+        input(class="w3-button w3-white w3-hover-white" type="button" value="" style="cursor: default; outline:none")
+        input(class="w3-btn w3-blue-grey" style="float:right" type="button" id="upload" value="Submeter")
+        input(id="close_new_resource" class="w3-btn w3-blue-grey" style="float:right; margin-right: 10px" type="button" value="Cancelar")

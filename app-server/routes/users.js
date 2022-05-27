@@ -14,19 +14,22 @@ router.get('/signup', function(req, res) {
   res.render('registo');
 });
 
+router.get('/logout', function(req, res) {
+  res.clearCookie("token");
+  res.redirect("/");
+})
 
 router.post('/signup', function(req, res) {
-  console.log("estou no post")
-  axios.post('http://localhost:8002/users/', req.body)
+  axios.post('http://localhost:8002/users/signup', req.body)
     .then(dados => {
       res.cookie('token', dados.data.token, {
         expires: new Date(Date.now() + '1d'),
         secure: false, // set to true if your using https
         httpOnly: true
       });
-      res.redirect('/users')
+      res.redirect('/')
     })
-    .catch(e => console.log(e))
+    .catch(error => res.render('error', {error}))
 });
 
 router.post('/login', function(req, res) {
@@ -39,7 +42,7 @@ router.post('/login', function(req, res) {
       });
       res.redirect('/')
     })
-    .catch(e => res.render('error', {error: e}))
+    .catch(error => res.render('error', {error}))
 });
 
 

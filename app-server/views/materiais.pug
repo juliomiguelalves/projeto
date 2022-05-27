@@ -1,0 +1,23 @@
+extends layout 
+
+block content 
+    table(class="w3-table-all")
+        tr 
+            th Tipo 
+            th Titulo 
+            th Data Criação 
+            th Descrição 
+            th id Autor 
+            th Nome Autor
+            th Classificação 
+            th ficheiros 
+        each m in materiais 
+            tr 
+                td=m.tipo 
+                td=m.titulo 
+                td=m.dataCriacao 
+                td=m.descricao 
+                td=m.idAutor 
+                td=m.nomeAutor 
+                td=m.classificacao 
+                td=m.ficheiros

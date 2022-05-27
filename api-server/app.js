@@ -3,7 +3,8 @@ var express = require('express');
 var logger = require('morgan');
 var jwt = require('jsonwebtoken')
 
-var indexRouter = require('./routes/index');
+var materiaisRouter = require('./routes/materiais');
+
 
 var mongoose = require('mongoose');
 
@@ -28,11 +29,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(function(req, res, next){
   var myToken = req.query.token || req.body.token
   if(myToken){
-    jwt.verify(myToken, "DAW2020", function(e, payload){
+    jwt.verify(myToken, "RPCW2022", function(e, payload){
       if(e){
         res.status(401).jsonp({error: "Token expirado!"})
       }
       else{
+        console.log("TOKEN ENTROU")
         req.level = payload.level
         next()
       }
@@ -43,7 +45,7 @@ app.use(function(req, res, next){
   }
 })
 
-app.use('/', indexRouter);
+app.use('/materiais', materiaisRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

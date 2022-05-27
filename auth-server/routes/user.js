@@ -13,21 +13,14 @@ router.get('/', function(req, res){
     .catch(e => res.status(500).jsonp({error: e}))
 })
 
-router.post('/', passport.authenticate('signup-auth'), function(req, res){
-  console.log("cheguei")
-  console.log(req.body.email)
-
-  UserControl.inserir(req.body)
-    .then(dados => res.status(201).jsonp({dados: dados}))
-    .catch(e => res.status(500).jsonp({error: e}))
-})
-
 router.post('/signup', passport.authenticate('signup-auth'), function(req, res) {
+  console.log("SIGNUP:"+req.user)
   if (req.user.success) {
     jwt.sign({
       email: req.user.user.email, 
       nivel: req.user.user.nivel,
       _id: req.user.user._id,
+      nome:req.user.user.nome,
       sub: 'RPCW2022'}, 
       "RPCW2022",
       {expiresIn: "1d"},
@@ -42,7 +35,8 @@ router.post('/signup', passport.authenticate('signup-auth'), function(req, res) 
 
   
 router.post('/login', passport.authenticate('login'), function(req, res){
-  jwt.sign({ email: req.user.email, nivel: req.user.nivel, 
+  console.log("LOGIN:"+req.user)
+  jwt.sign({ email: req.user.email, nivel: req.user.nivel, _id:req.user._id,nome:req.user.nome,
     sub: 'RPCW2022'}, 
     "RPCW2022",
     {expiresIn: 3600},
