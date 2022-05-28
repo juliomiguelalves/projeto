@@ -13,8 +13,9 @@ block content
             th ficheiros 
         each m in materiais 
             tr 
+                td
+                    a(href="/materiais/"+m._id)=m.titulo 
                 td=m.tipo 
-                td=m.titulo 
                 td=m.dataCriacao 
                 td=m.descricao 
                 td=m.idAutor 

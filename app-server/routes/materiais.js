@@ -8,7 +8,6 @@ var AdmZip  = require('adm-zip')
 var fs = require('fs');
 
 router.get('/',function(req,res){
-    console.log("estou aqui")
     axios.get('http://localhost:8001/materiais?token='+req.cookies.token)
         .then(dados=>res.render('materiais',{materiais:dados.data}))
         .catch(error=>res.render('error',{error:error}))
@@ -16,8 +15,16 @@ router.get('/',function(req,res){
 })
 
 
+
 router.get('/upload',function(req,res){
+    console.log("BOAS")
     res.render('insertMaterial')
+    
+})
+router.get('/:id',function(req,res){
+    axios.get('http://localhost:8001/materiais/'+req.params.id+'?token='+req.cookies.token)
+        .then(dados=>res.render('material',{material:dados.data}))
+        .catch(error=>res.render('error',{error:error}))
     
 })
 

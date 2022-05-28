@@ -38,7 +38,6 @@ router.get('/:id', function(req, res) {
 
 // Inserir uma tarefa
 router.post('/', function(req, res){
-  console.log(req.body)
   Material.inserir(req.body)
     .then(dados => res.status(201).jsonp({dados: dados}))
     .catch(e => res.status(500).jsonp({error: e}))

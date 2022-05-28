@@ -1,0 +1,34 @@
+extends layout 
+
+block content 
+    table.table 
+        tr 
+            td Titulo 
+            td Tipo 
+            td Descricao 
+            td Data Criacao 
+            td Data Registo 
+            td Classificação
+            td Tamanho 
+        tr 
+            td=material.titulo 
+            td=material.tipo 
+            td=material.descricao 
+            td=material.dataCriacao 
+            td=material.dataRegisto 
+            td=material.classificacao
+    table.table 
+        tr 
+            td Nome Ficheiro 
+            td Tamanho 
+            td Tipo 
+            td Visualizar 
+        each m in material.ficheiros 
+            tr 
+                td=m.nomeFicheiro 
+                td=m.tamanho 
+                td=m.mimetype 
+                td
+                    button(type="button" class="resource-btn" onclick=`previewFicheiro("${m.nomeFicheiro}", "${m.diretoria}", "${m.mimetype}")`) 👁
+
+    

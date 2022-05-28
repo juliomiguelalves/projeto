@@ -34,7 +34,6 @@ app.use(function(req, res, next){
         res.status(401).jsonp({error: "Token expirado!"})
       }
       else{
-        console.log("TOKEN ENTROU")
         req.level = payload.level
         next()
       }
