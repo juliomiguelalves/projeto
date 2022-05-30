@@ -44,7 +44,7 @@ function adicionarLinha(nr, operacao) {
     if (operacao == 'upload') html += `<input hidden name="checksum${nr}" value="">`
 
     html += `   <button class="adicionar" type="button" onclick="adicionarFicheiro(${nr}, '${operacao}')"> &#10133; </button>
-                <input name="recurso" type="file" id="novoFicheiro${nr}" `
+                <input name="material" type="file" id="novoFicheiro${nr}" `
 
     if (operacao == 'upload') html += `onchange='getChecksum(this,${nr})' ` 
     
@@ -86,7 +86,6 @@ function calcularTamanho(bytes) {
 
 function previewFicheiro(nome, diretoria, tipo_mime){
     var file
-
     if (tipo_mime == 'image/png' || tipo_mime == 'image/jpeg' || tipo_mime == 'image/gif')
         file = `<span class="helper"></span><img class="center" src="${diretoria}" style="max-width:90%; max-height:90%; border: 10px solid #000;"/>`;
     else if (checkMimetype(tipo_mime))
@@ -97,6 +96,7 @@ function previewFicheiro(nome, diretoria, tipo_mime){
     $('#preview_ficheiro').empty();
     $('#preview_ficheiro').append(file);
     $('#preview_ficheiro').modal();
+    
 }
 function checkMimetype(type) {
     return Array.prototype.reduce.call(navigator.plugins, function (supported, plugin) {

@@ -22,13 +22,6 @@ router.get('/', function(req, res) {
     .catch(e => res.status(500).jsonp({error: e}))
 });
 
-// Número de materiais na BD
-router.get('/numero', function(req, res) {
-  Material.listar()
-    .then(dados => res.status(200).jsonp(dados.length) )
-    .catch(e => res.status(500).jsonp({error: e}))
-});
-
 // Consultar um material
 router.get('/:id', function(req, res) {
   Material.consultar(req.params.id)
@@ -51,10 +44,13 @@ router.put('/', function(req, res){
 })
 
 // Remover uma tarefa
-router.delete('/:id', function(req,res){
+router.delete('/remover/:id', function(req,res){
+  
   Material.remover(req.params.id)
-    .then(dados => res.status(200).jsonp(dados))
+    .then(dados => {
+      res.status(200).jsonp(dados)})
     .catch(e => res.status(500).jsonp({error: e}))
+  
 });
 
 module.exports = router;

@@ -13,3 +13,6 @@ block content
       a(id="navbar_login" href='/users/login' style = "cursor: pointer; float: right") Login
       a(id="navbar_signup" href='/users/signup' style = "cursor: pointer; float: right") Registo
     
+    if noticias
+      each n in noticias
+        h1 Foi postado material por ${n.nomeAutor} 

@@ -1,6 +1,13 @@
 extends layout 
 
 block content 
+    link(rel='stylesheet' href='/stylesheets/recurso.css')
+    link(rel='stylesheet' href='/stylesheets/bootstrap-recurso.css')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js' integrity='sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut' crossorigin='anonymous')
+    script(src='/javascripts/bootstrap-tabs.js')
+    link(rel='stylesheet' type='text/css' href='//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='/stylesheets/modal.css')
+    div(id="preview_ficheiro" class="modal")
     table.table 
         tr 
             td Titulo 

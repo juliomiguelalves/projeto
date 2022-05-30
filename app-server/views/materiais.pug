@@ -1,6 +1,9 @@
 extends layout 
 
 block content 
+    if(nivel=="Produtor" || nivel == "Administrador")
+        form(action=`/materiais/upload` method="GET" style="display: inline-block")
+                button.btn.btn-primary(type="submit") Adicionar
     table(class="w3-table-all")
         tr 
             th Tipo 
@@ -11,6 +14,7 @@ block content
             th Nome Autor
             th Classificação 
             th ficheiros 
+            
         each m in materiais 
             tr 
                 td
@@ -22,3 +26,7 @@ block content
                 td=m.nomeAutor 
                 td=m.classificacao 
                 td=m.ficheiros
+                td 
+                    if(nivel=="Administrador")
+                        a(href=`/materiais/remover/${m._id}`) Remover
+                            

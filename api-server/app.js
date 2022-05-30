@@ -4,6 +4,7 @@ var logger = require('morgan');
 var jwt = require('jsonwebtoken')
 
 var materiaisRouter = require('./routes/materiais');
+var noticiasRouter = require('./routes/noticias');
 
 
 var mongoose = require('mongoose');
@@ -45,6 +46,7 @@ app.use(function(req, res, next){
 })
 
 app.use('/materiais', materiaisRouter);
+app.use('/noticias', noticiasRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
