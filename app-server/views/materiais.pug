@@ -24,8 +24,11 @@ block content
                 td=m.descricao 
                 td=m.idAutor 
                 td=m.nomeAutor 
-                td=m.classificacao 
-                td=m.ficheiros
+                if(m.classificacao<0)
+                    td Por classificar 
+                else 
+                    td=m.classificacao
+                td=m.ficheiros.length
                 td 
                     if(nivel=="Administrador")
                         a(href=`/materiais/remover/${m._id}`) Remover

@@ -28,3 +28,17 @@ module.exports.remover = function(id){
 module.exports.alterar = function(t){
     return Material.findByIdAndUpdate({_id: t._id}, t, {new: true})
 }
+
+module.exports.classificar = (idMat,classif) => {
+    return Material.findOneAndUpdate(
+        {"_id": idMat},
+        {$push: {classificacoes: classif}},
+        {useFindAndModify: false, new: true})
+}
+
+module.exports.atualizarClassificacao = (idMat,classif) => {
+    return Material.findOneAndUpdate(
+        {"_id": idMat, "classificacoes.user": classif.user},
+        {$set: {'classificacoes.$.pontuacao': classif.pontuacao}}, 
+        {useFindAndModify: false, new: true})
+}

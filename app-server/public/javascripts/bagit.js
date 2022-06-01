@@ -19,10 +19,28 @@ $(document).ready(function()
             hashes.push(value)
           }
           if(key == "material"){
+           /* var extension = value.name.split(".")[1]
+            if(extension=="xml"){
+              console.log(value)
+              $.ajax({
+                url: "/materiais/libxmljs2/validateSessionXml",
+                type: "POST",
+                data: value,
+                processData: false,
+                contentType: false,
+                success: function (response){
+                  //window.location.replace("/materiais");
+                  console.log("Resposta:",response)
+                }
+              });
+            }
+            else{*/
             zip.file("data/" + value.name, value)
             ficheiros.push(value.name)
+            //}
           }
         }
+
         var manifest = getManifestString(hashes, ficheiros)
         zip.file("manifest-md5.txt",manifest)
 
