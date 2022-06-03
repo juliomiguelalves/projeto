@@ -5,9 +5,6 @@ var crypto = require("crypto")
 var fs = require('fs')
 var mime = require('mime-types')
 
-
-
-
 function unveilToken(token){  
     var t = null;
     

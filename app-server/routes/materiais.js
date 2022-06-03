@@ -16,8 +16,6 @@ router.get('/',function(req,res){
     
 })
 
-
-
 router.get('/upload',function(req,res){
     var token = utils.unveilToken(req.cookies.token)
     res.render('insertMaterial',{nivel:token.nivel})
@@ -25,9 +23,17 @@ router.get('/upload',function(req,res){
 })
 
 router.get('/remover/:id',function(req,res){
+    var dataAtual = new Date().toISOString().substring(0,19)
     axios.delete('http://localhost:8001/materiais/remover/'+req.params.id+'?token='+req.cookies.token)
-        .then(dados=>res.redirect('/materiais'))
-        .catch(error=>res.render('error',{error:error}))
+        .then(dados=>{
+            var noticia = {
+            existe:0,
+            data:dataAtual
+            }
+            axios.put('http://localhost:8001/noticias/upload/'+req.params.id+'?token='+req.cookies.token,noticia)
+            .then(res.redirect('/materiais'))
+            .catch(error=>res.render('error',{error:error}))})
+            .catch(error=>res.render('error',{error:error}))
     
 })
 
@@ -100,6 +106,8 @@ router.post('/upload', upload.single('zip'), function(req, res) {
             dataRegisto: dataAtual,
             idAutor: token._id,
             nomeAutor: token.nome,
+            visualizacoes: 0,
+            downloads: 0,
             ficheiros: ficheiros
           }
           utils.clearZipFolder(extractpath,zippath)
@@ -110,11 +118,13 @@ router.post('/upload', upload.single('zip'), function(req, res) {
           .then(dados => {
             console.log("POSTEI O MATERIAL")
             var qnt = ficheiros.length
-            console.log("qnt:",qnt)
             var noticia = {
                 nomeAutor:token.nome,
+                idAutor:token._id,
                 nomeRecurso:req.body.titulo,
+                idMaterial:dados.data.dados._id,
                 qntFicheiros:qnt,
+                existe:1,
                 data:dataAtual
             }
             console.log(noticia)

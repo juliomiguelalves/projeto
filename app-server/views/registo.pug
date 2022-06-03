@@ -1,11 +1,12 @@
+
 extends layout 
 
 block content   
     h2 Repositório de materiais didáticos
     .w3-bar
         a(href="/") Home
-    div(id="signup_form")
-        .w3-container.w3-margin.w3-border.w3-indigo
+    div(id="signup_modal")
+        div(class="signup_container")
             .w3-container
                 h3 Introduza as suas credenciais: 
             form.w3-container(action='/users/signup' method='POST')
