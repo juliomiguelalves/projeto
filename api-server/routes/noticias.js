@@ -23,8 +23,8 @@ router.post('/', function(req, res) {
         res.status(500).jsonp({error: e})})
   });
 
-router.put('/update/:id', function(req, res) {
-    Noticia.alterar(req.body)
+router.put('/:id', function(req, res) {
+    Noticia.alterar(req.params.id,req.body)
       .then(dados => {
         console.log(dados)
         res.status(200).jsonp(dados) })

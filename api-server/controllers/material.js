@@ -16,6 +16,12 @@ module.exports.consultar = id => {
         .exec()
 }
 
+module.exports.autor = id => {
+    return Material
+        .find({idAutor: id})
+        .exec()
+}
+
 module.exports.inserir = t => {
     var novo = new Material(t)
     return novo.save()
@@ -27,4 +33,8 @@ module.exports.remover = function(id){
 
 module.exports.alterar = function(t){
     return Material.findByIdAndUpdate({_id: t._id}, t, {new: true})
+}
+
+module.exports.alterarPorID = function(id,t){
+    return Material.findOneAndUpdate({_id: id}, t, {new: true})
 }

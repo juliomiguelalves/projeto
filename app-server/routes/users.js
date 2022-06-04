@@ -61,8 +61,16 @@ router.post('/login', function(req, res) {
 
 router.get('/:id', function(req,res){
   var user
+  var token = utils.unveilToken(req.cookies.token)
   axios.get("http://localhost:8002/users/"+req.params.id)
-      .then(dados=>res.render('user',{user:dados.data}))
+      .then(dados=>{
+        user=dados.data
+        axios.get("http://localhost:8001/materiais/autor/"+req.params.id+'?token='+req.cookies.token)
+        .then(dados=> {
+          res.render('user',{user:user,materiais:dados.data})
+        })
+        .catch(erro => res.render('user',{user:user}))
+      })
       .catch(erro => res.render('error',{error:erro}))
 })
 

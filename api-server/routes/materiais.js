@@ -22,13 +22,6 @@ router.get('/', function(req, res) {
     .catch(e => res.status(500).jsonp({error: e}))
 });
 
-// Consultar um material
-router.get('/:id', function(req, res) {
-  Material.consultar(req.params.id)
-    .then(dados => res.status(200).jsonp(dados))
-    .catch(e => res.status(500).jsonp({error: e}))
-});
-
 // Inserir uma tarefa
 router.post('/', function(req, res){
   Material.inserir(req.body)
@@ -36,9 +29,22 @@ router.post('/', function(req, res){
     .catch(e => res.status(500).jsonp({error: e}))
 })
 
-// Alterar uma tarefa
-router.put('/', function(req, res){
-  Material.alterar(req.body)
+// Consultar um material
+router.get('/:id', function(req, res) {
+  Material.consultar(req.params.id)
+    .then(dados => res.status(200).jsonp(dados))
+    .catch(e => res.status(500).jsonp({error: e}))
+});
+
+router.get('/autor/:id', function(req, res) {
+  Material.autor(req.params.id)
+    .then(dados => res.status(200).jsonp(dados))
+    .catch(e => res.status(500).jsonp({error: e}))
+});
+
+// Alterar um material
+router.put('/:id', function(req, res){
+  Material.alterarPorID(req.params.id,req.body)
     .then(dados => res.status(201).jsonp({dados: dados}))
     .catch(e => res.status(500).jsonp({error: e}))
 })
