@@ -17,27 +17,31 @@ block content
             td Data Registo 
             td Classificação
             td Tamanho 
+            th Número de visualizações 
+            th Número de downloads
         tr 
             td=material.titulo 
             td=material.tipo 
             td=material.descricao 
             td=material.dataCriacao 
             td=material.dataRegisto 
+            td=material.visualizacoes 
+            td=material.downloads
             if(material.classificacao<0)
                 td Por classificar 
             else 
                 td=material.classificacao
-    .col-xs-12.col-sm-4.col-md-4.col-lg-4
-        b
-            span(style="color:#0074D9; margin-left: -15px") Classificar: 
-    .col-xs-12.col-sm-3.col-md-3.col-lg-3
-        div(class="stars rate" data-percent=`${material.classificacao}` style="margin-left: -550px; margin-top: 0px; margin-bottom: 0px")
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/20#${material._id}` title="Horrível") ★
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/40#${material._id}` title="Decente") ★
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/60#${material._id}` title="Bom") ★
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/80#${material._id}` title="Muito bom") ★
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/100#${material._id}` title="Excelente") ★  
-    
+.col-xs-12.col-sm-4.col-md-4.col-lg-4
+    b
+        span(style="color:#0074D9; margin-left: -15px") Classificar: 
+.col-xs-12.col-sm-3.col-md-3.col-lg-3
+    div(class="stars rate" data-percent=`${material.classificacao}` style="margin-left: -550px; margin-top: 0px; margin-bottom: 0px")
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/20#${material._id}` title="Horrível") ★
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/40#${material._id}` title="Decente") ★
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/60#${material._id}` title="Bom") ★
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/80#${material._id}` title="Muito bom") ★
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/100#${material._id}` title="Excelente") ★  
+
     table.table 
         tr 
             td Nome Ficheiro 

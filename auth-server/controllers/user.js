@@ -10,6 +10,12 @@ module.exports.listar = () => {
         .exec()
 }
 
+module.exports.listarPorID = (id) => {
+    return User
+        .findOne({_id: id})
+        .exec()
+}
+
 module.exports.consultar = mail => {
     return User
         .findOne({email: mail})
@@ -21,8 +27,10 @@ module.exports.inserir = u => {
     return novo.save()
 }
 
-module.exports.remover = function(mail){
-    return User.deleteOne({email: mail})
+module.exports.removerPorID = function(id){
+    return User
+        .deleteOne({_id: id})
+        .exec()
 }
 
 module.exports.alterar = function(u){

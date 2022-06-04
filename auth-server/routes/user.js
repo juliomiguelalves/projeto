@@ -46,4 +46,17 @@ router.post('/login', passport.authenticate('login'), function(req, res){
 });
 })
 
+router.delete('/delete/:id', function(req, res){
+  UserControl.removerPorID(req.params.id)
+    .then(dados => res.status(200).jsonp({dados: dados}))
+    .catch(e => res.status(500).jsonp({error: e}))
+})
+
+
+router.get('/:id', function(req, res){
+  UserControl.listarPorID(req.params.id)
+    .then(dados => res.status(200).jsonp({dados: dados}))
+    .catch(e => res.status(500).jsonp({error: e}))
+})
+
 module.exports = router;

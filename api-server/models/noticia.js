@@ -2,8 +2,11 @@ const mongoose = require('mongoose')
 
 var noticiaSchema = new mongoose.Schema({
   nomeAutor : {type: String, required: true},
+  idAutor : {type: String, required: true},
   nomeRecurso : {type: String, required: true},
+  idMaterial : {type: String, required: true},
   qntFicheiros : {type:Number,required:true},
+  existe: {type:Number,required:true},
   data: {type: String, default: new Date().toISOString().substring(0,19)}
 
 

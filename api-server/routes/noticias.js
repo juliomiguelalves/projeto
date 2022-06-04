@@ -23,4 +23,14 @@ router.post('/', function(req, res) {
         res.status(500).jsonp({error: e})})
   });
 
+router.put('/update/:id', function(req, res) {
+    Noticia.alterar(req.body)
+      .then(dados => {
+        console.log(dados)
+        res.status(200).jsonp(dados) })
+      .catch(e => {
+        console.log(e)
+        res.status(500).jsonp({error: e})})
+  });
+
 module.exports = router
