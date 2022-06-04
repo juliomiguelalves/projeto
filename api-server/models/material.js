@@ -19,10 +19,11 @@ var materialSchema = new mongoose.Schema({
     nomeAutor: {type: String, required: true},
     visualizacoes : {type:Number,required:true},
     downloads : {type:Number,required:true},
-    classificacao: {type: [{
+    classificacoes: {type: [{
       user: {type: String, required: true},
       pontuacao: {type: Number, required: true}
   }], default: []},
+    classificacao:{type:Number, default:-1},
     ficheiros: {type: [ficheiroSchema], default: []}
 
   });

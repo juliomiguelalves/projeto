@@ -6,12 +6,14 @@ var upload = multer({dest: './uploads'});
 var utils = require('./utils')
 var AdmZip  = require('adm-zip')
 var fs = require('fs');
+var libxmljs = require('libxmljs2');
 
 router.get('/',function(req,res){
     var token = utils.unveilToken(req.cookies.token)
-    console.log("TOKEN:",token.nivel)
     axios.get('http://localhost:8001/materiais?token='+req.cookies.token)
-        .then(dados=>res.render('materiais',{materiais:dados.data,nivel:token.nivel}))
+        .then(dados=>{
+          res.render('materiais',{materiais:dados.data,nivel:token.nivel})
+        })
         .catch(error=>res.render('error',{error:error}))
     
 })
@@ -44,6 +46,18 @@ router.get('/:id',function(req,res){
     
 })
 
+router.get('/:id/classificar/:pont', (req,res) => {
+  
+    var token = utils.unveilToken(req.cookies.token);
+
+    axios.put(`http://localhost:8001/materiais/${req.params.id}/classificar?token=${req.cookies.token}`,
+      {user: token._id, pontuacao: Number.parseInt(req.params.pont)})
+        .then(dados => res.redirect(req.headers.referer))
+        .catch(error => res.render('error', {error}))
+    
+    
+})
+
 
 
 router.post('/upload', upload.single('zip'), function(req, res) {
@@ -67,6 +81,9 @@ router.post('/upload', upload.single('zip'), function(req, res) {
             else if (entry.entryName == "manifest-md5.txt") {
                 let entries = entry.getData().toString().split("\n")
                 entries.pop()
+                if(!fs.existsSync(extractpath.replace("uploads","public/fileStore/"))){
+                    fs.mkdirSync(extractpath.replace("uploads","public/fileStore/"))
+                }
                 entries.forEach(a=>{
                     let separated = a.split(/ (.+)/ ,2)
                     let hash = separated[0]                    
@@ -141,7 +158,33 @@ router.post('/upload', upload.single('zip'), function(req, res) {
     else res.redirect('/materiais')
 })
     
-    
+/*router.post('/libxmljs2/validateSessionXml', (req, res, next) => {
+    var xmlData = req;
+    console.log(xmlData)
+    // parse incoming XML data
+    var xmlDoc = libxmljs.parseXml(xmlData);  
+  
+    // load XML schema from file system
+    var xmlSchemaDoc = loadXmlSchema('schemaProf.xsd');
+  
+    // validate XML data against schema
+    var validationResult = xmlDoc.validate(xmlSchemaDoc);
+  
+    // return success or failure with validation errors
+    if (validationResult) {
+      //res.status(200).send('validation successful');
+      console.log("Materiais:",validationResult)
+    } else {
+      //res.status(400).send(`${xmlDoc.validationErrors}`);
+      console.log("Materiais Erro:",xmlDoc.validationErrors)
+    }  
+  });
+  
+  function loadXmlSchema(filename) {
+    var schemaPath = path.join(__dirname, '..', 'schemas', filename);
+    var schemaText = fs.readFileSync(schemaPath, 'utf8');
+    return libxmljs.parseXml(xmlSchema); 
+  }  */
     
     
     
