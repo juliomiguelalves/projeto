@@ -31,6 +31,14 @@ router.post('/', function(req, res){
     .catch(e => res.status(500).jsonp({error: e}))
 })
 
+router.get('/download/:id',(req,res)=>{
+    Material.getFicheiros(req.params.id)
+      .then(dados => res.status(200).jsonp(dados))
+      .catch(error => res.status(500).jsonp(error))
+})
+
+
+
 // Consultar um material
 router.get('/:id', function(req, res) {
   Material.consultar(req.params.id)
@@ -79,6 +87,16 @@ router.put('/:id/classificar', function(req, res) {
     })
     .catch(e => res.status(500).jsonp({error: e}))
 });
+
+router.post('/download', function(req, res){
+  var erros = []
+  Material.incrementarDownloads(req.body)
+  .then(d => {})
+  .catch(e => erros.push(e))
+
+  if (!erros.length) res.status(201).jsonp({})
+  else res.status(500).jsonp({erros})
+})
 
 router.post('/:id/addComment', function(req,res){
   Material.adicionarComentario(req.params.id, req.body)

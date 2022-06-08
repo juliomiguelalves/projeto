@@ -6,7 +6,6 @@ var upload = multer({dest: './uploads'});
 var utils = require('./utils')
 var AdmZip  = require('adm-zip')
 var fs = require('fs');
-var libxmljs = require('libxmljs2');
 
 router.get('/',function(req,res){
     var token = utils.unveilToken(req.cookies.token)
@@ -32,8 +31,35 @@ router.get('/upload',function(req,res){
     
 })
 
+router.post('/download/:id',(req,res) =>{
+  var zips =[]
+  axios.get('http://localhost:8001/materiais/download/'+req.params.id+'?token='+req.cookies.token)
+      .then(materiais =>{
+        let tit = req.params.id
+        let ficheiros = materiais.data[0].ficheiros
+        var zip = utils.zipMaterial(ficheiros)
+        zips.push({tit,zip})
+        
+        let files = utils.zipAll(zips)
+        let filename = materiais.data[0].length == 1 ? materiais.data[0].ficheiros[0].nomeFicheiro : Date.now()
+        axios.post('http://localhost:8001/materiais/download?token=' + req.cookies.token, req.params.id)
+          .then(() => {
+            res.writeHead(200, {
+              "Content-Type": "application/zip",
+              "Content-Disposition": `attachment; filename=${filename}.zip`,
+            })
+            materiais.data.length == 1 ? res.write(zips[0].zip) : res.write(files)
+            res.end()
+          })
+          .catch(errors => res.render('error', {error:errors[0]}))
+      })
+      .catch(error => res.render('error',{error}))
+})
+
 router.get('/remover/:id',function(req,res){
     var dataAtual = new Date().toISOString().substring(0,19)
+    var token = utils.unveilToken(req.cookies.token)
+    if(token.nivel == "Administrador"){
     axios.delete('http://localhost:8001/materiais/remover/'+req.params.id+'?token='+req.cookies.token)
         .then(dados=>{
             var noticia = {
@@ -44,6 +70,10 @@ router.get('/remover/:id',function(req,res){
             .then(res.redirect('/materiais'))
             .catch(error=>res.render('error',{error:error}))})
             .catch(error=>res.render('error',{error:error}))
+    }
+    else{
+      res.render('error')
+    }
     
 })
 

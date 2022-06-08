@@ -60,3 +60,18 @@ module.exports.adicionarComentario = (id, com) => {
             {useFindAndModify: false, new: true}
         )
 }
+
+module.exports.incrementarDownloads = (id) =>{
+    return Material
+            .findOneAndUpdate(
+                {_id:id},
+                {$inc:{downloads:1}},
+                {useFindAndModify: false, new: true}
+            )
+}
+
+module.exports.getFicheiros = (id) =>{
+    return Material
+            .find({_id:id},{_id:0,ficheiros:1})
+            .exec()
+}

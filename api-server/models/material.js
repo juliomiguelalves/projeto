@@ -24,8 +24,8 @@ var materialSchema = new mongoose.Schema({
     descricao: String,
     idAutor: {type: String, required: true},
     nomeAutor: {type: String, required: true},
-    visualizacoes : {type:Number,required:true},
-    downloads : {type:Number,required:true},
+    visualizacoes : {type:Number,default:0},
+    downloads : {type:Number,default:0},
     classificacoes: {type: [{
       user: {type: String, required: true},
       pontuacao: {type: Number, required: true}

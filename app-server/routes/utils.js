@@ -1,9 +1,44 @@
 var jwt = require('jsonwebtoken')
 var keyToken = "RPCW2022"
-var axios = require('axios')
 var crypto = require("crypto")
 var fs = require('fs')
 var mime = require('mime-types')
+var AdmZip = require('adm-zip')
+var utils = require('./utils')
+
+function genManifest(ficheiros){
+    var manifest = ''
+    ficheiros.forEach(f => {
+        manifest += `${f.hash} data/${f.nome_ficheiro}\n`
+    })
+    return manifest
+}
+
+function zipMaterial(ficheiros){
+    var zip = new AdmZip()
+    var dir = __dirname.replace(/\\/g, "/").replace("routes","public")
+    var manifest = genManifest(ficheiros)
+    zip.addFile("manifest-md5.txt", manifest)
+    ficheiros.forEach(f => {
+        let nome = f.diretoria.split("/")[3]
+        zip.addLocalFile(dir + f.diretoria)
+        zip.getEntry(nome).entryName = "data/" + f.nomeFicheiro
+    })
+    return zip.toBuffer()
+}
+
+function zipAll(zips){
+    var zip = new AdmZip()
+    var manifest = ''
+    var dir = __dirname.replace(/\\/g, "/").replace("routes","public")
+    zips.forEach(z => {
+        var hash = calculateMd5_buffer(z.zip)
+        manifest += `${hash} data/${z.tit}.zip\n`
+        zip.addFile(`data/${z.tit}.zip`, z.zip)
+    })
+    zip.addFile("manifest-md5.txt",manifest)
+    return zip.toBuffer()
+}
 
 function unveilToken(token){  
     var t = null;
@@ -81,5 +116,7 @@ module.exports ={
     clearZipFolder,
     getMimeType,
     calculateSize,
-    getSize
+    getSize,
+    zipAll,
+    zipMaterial
 }
