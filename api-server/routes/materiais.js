@@ -18,7 +18,9 @@ function verificaNivel(autorizados,req,res,next){
 // Listar todas as materiais
 router.get('/', function(req, res) {
   Material.listar()
-    .then(dados => res.status(200).jsonp(dados) )
+    .then(dados => {
+      res.status(200).jsonp(dados) 
+    })
     .catch(e => res.status(500).jsonp({error: e}))
 });
 
@@ -57,6 +59,25 @@ router.delete('/remover/:id', function(req,res){
       res.status(200).jsonp(dados)})
     .catch(e => res.status(500).jsonp({error: e}))
   
+});
+
+// Classificar um material
+router.put('/:id/classificar', function(req, res) {
+  Material.atualizarClassificacao(req.params.id, req.body)
+    .then(dados => {
+      if (!dados) {
+        Material.classificar(req.params.id, req.body)
+          .then(dados => {
+            Material.addClassificacoes(req.params.id,req.body)
+            .then(dados => res.status(201).jsonp({dados}))
+            .catch(e => res.status(500).jsonp({error: e}))
+          })
+          .catch(e => res.status(500).jsonp({error: e}))
+        
+      }
+      else res.status(201).jsonp({dados})
+    })
+    .catch(e => res.status(500).jsonp({error: e}))
 });
 
 module.exports = router;

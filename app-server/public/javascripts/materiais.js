@@ -90,6 +90,10 @@ function previewFicheiro(nome, diretoria, tipo_mime){
         file = `<span class="helper"></span><img class="center" src="${diretoria}" style="max-width:90%; max-height:90%; border: 10px solid #000;"/>`;
     else if (checkMimetype(tipo_mime))
         file = `<iframe src="${diretoria}" style="width:100%; height:100%"/>`;
+    else if(tipo_mime=="application/xml")
+        file = `<iframe type="text/html" src="${diretoria}" style="background:black;width:100%; height:100%"/>`;
+    else if(tipo_mime=="application/vnd.openxmlformats-officedocument.presentationml.presentation")
+        file = `<iframe type="text/html" src="https://docs.google.com/labnol.org/viewer?src=${diretoria}&embedded=true" style="background:black;width:100%; height:100%"/>`;
     else 
         file = '<p>' + nome + ', ' + tipo_mime + '<p>';
     

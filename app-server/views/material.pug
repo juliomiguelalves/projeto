@@ -3,7 +3,7 @@ extends layout
 block content 
     link(rel='stylesheet' href='/stylesheets/recurso.css')
     link(rel='stylesheet' href='/stylesheets/bootstrap-recurso.css')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js' integrity='sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut' crossorigin='anonymous')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/poppematerial.js/1.14.6/umd/poppematerial.min.js' integrity='sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut' crossorigin='anonymous')
     script(src='/javascripts/bootstrap-tabs.js')
     link(rel='stylesheet' type='text/css' href='//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
     link(rel='stylesheet', href='/stylesheets/modal.css')
@@ -29,6 +29,21 @@ block content
             td Falta colocar o tamanho
             td=material.visualizacoes 
             td=material.downloads
+            if(material.classificacao<0)
+                td Por classificar 
+            else 
+                td=material.classificacao
+.col-xs-12.col-sm-4.col-md-4.col-lg-4
+    b
+        span(style="color:#0074D9; margin-left: -15px") Classificar: 
+.col-xs-12.col-sm-3.col-md-3.col-lg-3
+    div(class="stars rate" data-percent=`${material.classificacao}` style="margin-left: -550px; margin-top: 0px; margin-bottom: 0px")
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/20#${material._id}` title="Horrível") ★
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/40#${material._id}` title="Decente") ★
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/60#${material._id}` title="Bom") ★
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/80#${material._id}` title="Muito bom") ★
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/100#${material._id}` title="Excelente") ★  
+
     table.table 
         tr 
             td Nome Ficheiro 
