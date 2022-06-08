@@ -8,7 +8,7 @@ block content
             a(id="navbar_resources" href="/users" style="float: left") Utilizadores
         if(nivel=="Administrador" ||nivel=="Produtor" ||nivel=="Consumidor" )
             a(style="float: left")=nivel
-            a(href="/perfil" style="float: left") Perfil
+            a(href="/users/"+idUser style="float: left") Perfil
             a(href="/users/logout" style="float: right") Logout
             if(nivel=="Administrador")
         else

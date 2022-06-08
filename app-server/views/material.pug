@@ -7,6 +7,19 @@ block content
     script(src='/javascripts/bootstrap-tabs.js')
     link(rel='stylesheet' type='text/css' href='//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
     link(rel='stylesheet', href='/stylesheets/modal.css')
+    div(id="navbar" class="topnav")
+        a(href='/' style="float: left") Home
+        a(id="navbar_resources" href="/materiais" style="float: left") Materiais
+        if(nivel=="Administrador")
+            a(id="navbar_resources" href="/users" style="float: left") Utilizadores
+        if(nivel=="Administrador" ||nivel=="Produtor" ||nivel=="Consumidor" )
+            a(style="float: left")=nivel
+            a(href="/users/"+idUser style="float: left") Perfil
+            a(href="/users/logout" style="float: right") Logout
+        else
+            a(id="navbar_login" href='/users/login' style = "cursor: pointer; float: right") Login
+            a(id="navbar_signup" href='/users/signup' style = "cursor: pointer; float: right") Registo 
+
     div(id="preview_ficheiro" class="modal")
     table.table 
         tr 
@@ -15,18 +28,15 @@ block content
             td Descricao 
             td Data Criacao 
             td Data Registo 
-            td Classificação
-            td Tamanho 
             td Número de visualizações 
             td Número de downloads
+            td Classificação
         tr 
             td=material.titulo 
             td=material.tipo 
             td=material.descricao 
             td=material.dataCriacao 
-            td=material.dataRegisto 
-            td=material.classificacao
-            td Falta colocar o tamanho
+            td=material.dataRegisto
             td=material.visualizacoes 
             td=material.downloads
             if(material.classificacao < 0)
@@ -61,7 +71,7 @@ block content
                     button(type="button" class="resource-btn" onclick=`previewFicheiro("${m.nomeFicheiro}", "${m.diretoria}", "${m.mimetype}")`) 👁
 
     ul.comments    
-        li.clearfix
+        l.clearfix
                     form(id="comentarPostForm" action='/materiais/'+ material._id+"/addComment" method="POST")
                         textarea(id="commentPost" name="corpo" placeholder="Insira o seu comentário..." maxlength="255" style="height:120px; width:100%; resize: none")
                         input(class="w3-right btn btn-primary" type="submit" id="commentButton" value="Comentar" style="margin")    
