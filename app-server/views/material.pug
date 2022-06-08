@@ -7,6 +7,19 @@ block content
     script(src='/javascripts/bootstrap-tabs.js')
     link(rel='stylesheet' type='text/css' href='//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
     link(rel='stylesheet', href='/stylesheets/modal.css')
+    div(id="navbar" class="topnav")
+        a(href='/' style="float: left") Home
+        a(id="navbar_resources" href="/materiais" style="float: left") Materiais
+        if(nivel=="Administrador")
+            a(id="navbar_resources" href="/users" style="float: left") Utilizadores
+        if(nivel=="Administrador" ||nivel=="Produtor" ||nivel=="Consumidor" )
+            a(style="float: left")=nivel
+            a(href="/users/"+idUser style="float: left") Perfil
+            a(href="/users/logout" style="float: right") Logout
+        else
+            a(id="navbar_login" href='/users/login' style = "cursor: pointer; float: right") Login
+            a(id="navbar_signup" href='/users/signup' style = "cursor: pointer; float: right") Registo 
+
     div(id="preview_ficheiro" class="modal")
     table.table 
         tr 
@@ -15,18 +28,15 @@ block content
             td Descricao 
             td Data Criacao 
             td Data Registo 
-            td Classificação
-            td Tamanho 
             td Número de visualizações 
             td Número de downloads
+            td Classificação
         tr 
             td=material.titulo 
             td=material.tipo 
             td=material.descricao 
             td=material.dataCriacao 
-            td=material.dataRegisto 
-            td=material.classificacao
-            td Falta colocar o tamanho
+            td=material.dataRegisto
             td=material.visualizacoes 
             td=material.downloads
             if(material.classificacao < 0)
@@ -36,13 +46,12 @@ block content
     .col-xs-12.col-sm-4.col-md-4.col-lg-4
         b
             span(style="color:#0074D9; margin-left: -15px") Classificar: 
-    .col-xs-12.col-sm-3.col-md-3.col-lg-3
-        div(class="stars rate" data-percent=`${material.classificacao}` style="margin-left: -550px; margin-top: 0px; margin-bottom: 0px")
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/20#${material._id}` title="Horrível") ★
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/40#${material._id}` title="Decente") ★
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/60#${material._id}` title="Bom") ★
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/80#${material._id}` title="Muito bom") ★
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/100#${material._id}` title="Excelente") ★  
+    div(class="stars rate" data-percent=`${material.classificacao}` style="margin-left: -550px; margin-top: 0px; margin-bottom: 0px")
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/20#${material._id}` title="Horrível") ★
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/40#${material._id}` title="Decente") ★
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/60#${material._id}` title="Bom") ★
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/80#${material._id}` title="Muito bom") ★
+        a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/100#${material._id}` title="Excelente") ★  
 
         table.table 
             tr 
@@ -59,7 +68,7 @@ block content
                         button(type="button" class="resource-btn" onclick=`previewFicheiro("${m.nomeFicheiro}", "${m.diretoria}", "${m.mimetype}")`) 👁
 
     ul.comments    
-        li.clearfix
+        l.clearfix
                     form(id="comentarPostForm" action='/materiais/'+ material._id+"/addComment" method="POST")
                         textarea(id="commentPost" name="corpo" placeholder="Insira o seu comentário..." maxlength="255" style="height:120px; width:100%; resize: none")
                         input(class="w3-right btn btn-primary" type="submit" id="commentButton" value="Comentar" style="margin")    
