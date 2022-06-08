@@ -67,7 +67,7 @@ router.get('/:id', function(req,res){
         user=dados.data
         axios.get("http://localhost:8001/materiais/autor/"+req.params.id+'?token='+req.cookies.token)
         .then(dados=> {
-          res.render('user',{user:user,materiais:dados.data})
+          res.render('user',{user:user,materiais:dados.data,nivel:token.nivel})
         })
         .catch(erro => res.render('user',{user:user}))
       })

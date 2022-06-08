@@ -80,4 +80,10 @@ router.put('/:id/classificar', function(req, res) {
     .catch(e => res.status(500).jsonp({error: e}))
 });
 
+router.post('/:id/addComment', function(req,res){
+  Material.adicionarComentario(req.params.id, req.body)
+    .then(dados => res.status(200).jsonp(dados))
+    .catch(e => res.status(500).jsonp({error: e}))
+})
+
 module.exports = router;

@@ -1,35 +1,39 @@
 extends layout 
 
 block content 
-    if(nivel=="Produtor" || nivel == "Administrador")
-        form(action=`/materiais/upload` method="GET" style="display: inline-block")
-                button.btn.btn-primary(type="submit") Adicionar
-    table(class="w3-table-all")
-        tr 
-            th Tipo 
-            th Titulo 
-            th Data Criação 
-            th Descrição 
-            th id Autor 
-            th Nome Autor
-            th Classificação 
-            th ficheiros 
-            
-        each m in materiais 
+    if nivel != "IND"
+        if(nivel=="Produtor" | nivel == "Administrador" )
+            form(action=`/materiais/upload` method="GET" style="display: inline-block")
+                    button.btn.btn-primary(type="submit") Adicionar
+        table(class="w3-table-all")
             tr 
-                td
-                    a(href="/materiais/"+m._id)=m.titulo 
-                td=m.tipo 
-                td=m.dataCriacao 
-                td=m.descricao 
-                td=m.idAutor 
-                td=m.nomeAutor 
-                if(m.classificacao<0)
-                    td Por classificar 
-                else 
-                    td=m.classificacao
-                td=m.ficheiros.length
-                td 
-                    if(nivel=="Administrador")
-                        a(href=`/materiais/remover/${m._id}`) Remover
+                th Titulo 
+                th Tipo 
+                th Data Criação 
+                th Descrição 
+                th id Autor 
+                th Nome Autor
+                th Classificação 
+                th ficheiros 
+                
+            each m in materiais 
+                tr 
+                    td
+                        a(href="/materiais/"+m._id)=m.titulo 
+                    td=m.tipo 
+                    td=m.dataCriacao 
+                    td=m.descricao 
+                    td=m.idAutor 
+                    td=m.nomeAutor 
+                    if(m.classificacao < 0)
+                        td Por classificar 
+                    else 
+                        td=m.classificacao
+                    td=m.ficheiros.length
+                    td 
+                        if(nivel=="Administrador")
+                            a(href=`/materiais/remover/${m._id}`) Remover
+    else 
+        a(href="/") Voltar
+        h1 Registe-se ou inicie sessão para aceder a esta página
                             

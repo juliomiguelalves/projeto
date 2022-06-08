@@ -10,11 +10,19 @@ var libxmljs = require('libxmljs2');
 
 router.get('/',function(req,res){
     var token = utils.unveilToken(req.cookies.token)
-    axios.get('http://localhost:8001/materiais?token='+req.cookies.token)
-        .then(dados=>{
-          res.render('materiais',{materiais:dados.data,nivel:token.nivel})
-        })
-        .catch(error=>res.render('error',{error:error}))
+    if(token){
+      if (token.nivel=="Produtor" | token.nivel=="Administrador" | token.nivel=="Consumidor"){
+
+      axios.get('http://localhost:8001/materiais?token='+req.cookies.token)
+          .then(dados=>{
+            res.render('materiais',{materiais:dados.data,nivel:token.nivel})
+          })
+          .catch(error=>res.render('materiais',{nivel:"IND"}))
+      }
+    }
+    else{
+      res.render('materiais',{nivel:"IND"})
+    }
     
 })
 
@@ -42,6 +50,7 @@ router.get('/remover/:id',function(req,res){
 router.get('/:id',function(req,res){
     axios.get('http://localhost:8001/materiais/'+req.params.id+'?token='+req.cookies.token)
         .then(dados=>{
+          console.log(dados.data)
             res.render('material',{material:dados.data})
             var vis=0
             vis = dados.data.visualizacoes + 1
@@ -67,6 +76,27 @@ router.get('/:id/classificar/:pont', (req,res) => {
         .catch(error => res.render('error', {error}))
     
     
+})
+
+router.post('/:id/addComment',(req,res) =>{
+  var token = utils.unveilToken(req.cookies.token);
+  if(token.nivel == "Produtor" | token.nivel == "Administrador"){
+    req.body["id_autor"] = token._id
+    req.body["dataCriacao"] = new Date().toISOString().substring(0,19)
+    req.body["nome_autor"] = token.nome
+    axios.post('http://localhost:8001/materiais/' + req.params.id + '/addComment?token=' + req.cookies.token, req.body)
+          .then(dados => res.redirect("/materiais/"+dados.data._id))
+          .catch(error => res.render('error', {error}))
+  }
+  else{
+    req.body["id_autor"] = "0"
+    req.body["dataCriacao"] = new Date().toISOString().substring(0,19)
+    req.body["nome_autor"] = "Convidado"
+    axios.post('http://localhost:8001/materiais/' + req.params.id + '/addComment?token=' + req.cookies.token, req.body)
+          .then(dados => res.redirect("/materiais/"+dados.data._id))
+          .catch(error => res.render('error', {error}))
+  }
+
 })
 
 
@@ -112,7 +142,6 @@ router.post('/upload', upload.single('zip'), function(req, res) {
                         hash:newhash
                     })
                     fs.renameSync(diretoria, nova_diretoria, err => { if (err) throw err })
-                    console.log
                     let pertence = false
 
                     entradasZip.forEach(r => { if(r==nome_ficheiro) pertence = true })
@@ -127,7 +156,7 @@ router.post('/upload', upload.single('zip'), function(req, res) {
         var dataAtual = new Date().toISOString().substring(0,19)
 
         var material = {
-            tipo:"outro",
+            tipo:req.body.titulo,
             titulo: req.body.titulo,
             descricao: req.body.descricao,
             dataCriacao: req.body.dataCriacao,
@@ -169,34 +198,7 @@ router.post('/upload', upload.single('zip'), function(req, res) {
     else res.redirect('/materiais')
 })
     
-/*router.post('/libxmljs2/validateSessionXml', (req, res, next) => {
-    var xmlData = req;
-    console.log(xmlData)
-    // parse incoming XML data
-    var xmlDoc = libxmljs.parseXml(xmlData);  
-  
-    // load XML schema from file system
-    var xmlSchemaDoc = loadXmlSchema('schemaProf.xsd');
-  
-    // validate XML data against schema
-    var validationResult = xmlDoc.validate(xmlSchemaDoc);
-  
-    // return success or failure with validation errors
-    if (validationResult) {
-      //res.status(200).send('validation successful');
-      console.log("Materiais:",validationResult)
-    } else {
-      //res.status(400).send(`${xmlDoc.validationErrors}`);
-      console.log("Materiais Erro:",xmlDoc.validationErrors)
-    }  
-  });
-  
-  function loadXmlSchema(filename) {
-    var schemaPath = path.join(__dirname, '..', 'schemas', filename);
-    var schemaText = fs.readFileSync(schemaPath, 'utf8');
-    return libxmljs.parseXml(xmlSchema); 
-  }  */
-    
+
     
     
     

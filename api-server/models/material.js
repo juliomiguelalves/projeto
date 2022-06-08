@@ -9,6 +9,13 @@ var ficheiroSchema = new mongoose.Schema({
 
 })
 
+var comentarioSchema = new mongoose.Schema({
+  corpo: {type: String, required: true},
+  id_autor: {type: String, required: true},
+  nome_autor: {type: String, required: true}, 
+  dataCriacao: {type: String, required: true, default: new Date().toISOString().substr(0,19)}
+});
+
 var materialSchema = new mongoose.Schema({
     tipo: {type: String, required: true},
     titulo: { type: String, required: true },
@@ -24,7 +31,8 @@ var materialSchema = new mongoose.Schema({
       pontuacao: {type: Number, required: true}
   }], default: []},
     classificacao:{type:Number, default:-1},
-    ficheiros: {type: [ficheiroSchema], default: []}
+    ficheiros: {type: [ficheiroSchema], default: []},
+    comentarios : {type: [comentarioSchema], default: []}
 
   });
 

@@ -37,6 +37,7 @@ module.exports.alterar = function(t){
 
 module.exports.alterarPorID = function(id,t){
     return Material.findOneAndUpdate({_id: id}, t, {new: true})
+}
 module.exports.classificar = (idMat,classif) => {
     return Material.findOneAndUpdate(
         {"_id": idMat},
@@ -49,4 +50,13 @@ module.exports.atualizarClassificacao = (idMat,classif) => {
         {"_id": idMat, "classificacoes.user": classif.user},
         {$set: {'classificacoes.$.pontuacao': classif.pontuacao}}, 
         {useFindAndModify: false, new: true})
+}
+
+module.exports.adicionarComentario = (id, com) => {
+    return Material
+        .findOneAndUpdate(
+            {_id: id},
+            {$push: {comentarios: com}},
+            {useFindAndModify: false, new: true}
+        )
 }
