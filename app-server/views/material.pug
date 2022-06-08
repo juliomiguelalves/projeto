@@ -17,14 +17,16 @@ block content
             td Data Registo 
             td Classificação
             td Tamanho 
-            th Número de visualizações 
-            th Número de downloads
+            td Número de visualizações 
+            td Número de downloads
         tr 
             td=material.titulo 
             td=material.tipo 
             td=material.descricao 
             td=material.dataCriacao 
             td=material.dataRegisto 
+            td=material.classificacao
+            td Falta colocar o tamanho
             td=material.visualizacoes 
             td=material.downloads
             if(material.classificacao<0)
