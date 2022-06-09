@@ -42,7 +42,7 @@ router.post('/download/:id',(req,res) =>{
         
         let files = utils.zipAll(zips)
         let filename = materiais.data[0].length == 1 ? materiais.data[0].ficheiros[0].nomeFicheiro : Date.now()
-        axios.post('http://localhost:8001/materiais/download?token=' + req.cookies.token, req.params.id)
+        axios.post('http://localhost:8001/materiais/download/'+req.params.id+'?token=' + req.cookies.token, req.params.id)
           .then(() => {
             res.writeHead(200, {
               "Content-Type": "application/zip",
@@ -78,10 +78,12 @@ router.get('/remover/:id',function(req,res){
 })
 
 router.get('/:id',function(req,res){
+  var token = utils.unveilToken(req.cookies.token)
+
     axios.get('http://localhost:8001/materiais/'+req.params.id+'?token='+req.cookies.token)
         .then(dados=>{
           console.log(dados.data)
-            res.render('material',{material:dados.data})
+            res.render('material',{material:dados.data,nivel:token.nivel})
             var vis=0
             vis = dados.data.visualizacoes + 1
             var mat={

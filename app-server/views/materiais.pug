@@ -25,10 +25,14 @@ block content
                     td=m.descricao 
                     td=m.idAutor 
                     td=m.nomeAutor 
-                    if(m.classificacao < 0)
+                    if(m.classificacoes.length == 0)
                         td Por classificar 
                     else 
-                        td=m.classificacao
+                        - let soma = 0
+                        each classi in m.classificacoes 
+                            - soma += classi.pontuacao 
+                        - var nota = soma / m.classificacoes.length 
+                        td=nota
                     td=m.ficheiros.length
                     td 
                         if(nivel=="Administrador")

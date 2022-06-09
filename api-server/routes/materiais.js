@@ -75,10 +75,10 @@ router.put('/:id/classificar', function(req, res) {
     .then(dados => {
       if (!dados) {
         Material.classificar(req.params.id, req.body)
-          .then(dados => {
-            Material.addClassificacoes(req.params.id,req.body)
-            .then(dados => res.status(201).jsonp({dados}))
-            .catch(e => res.status(500).jsonp({error: e}))
+          .then(dados => {res.status(201).jsonp({dados})
+            //Material.addClassificacoes(req.params.id,req.body)
+            //.then(dados => res.status(201).jsonp({dados}))
+            //.catch(e => res.status(500).jsonp({error: e}))
           })
           .catch(e => res.status(500).jsonp({error: e}))
         
@@ -88,9 +88,10 @@ router.put('/:id/classificar', function(req, res) {
     .catch(e => res.status(500).jsonp({error: e}))
 });
 
-router.post('/download', function(req, res){
+router.post('/download/:id', function(req, res){
   var erros = []
-  Material.incrementarDownloads(req.body)
+  console.log(req.params.id)
+  Material.incrementarDownloads(req.params.id)
   .then(d => {})
   .catch(e => erros.push(e))
 

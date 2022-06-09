@@ -39,10 +39,14 @@ block content
             td=material.dataRegisto
             td=material.visualizacoes 
             td=material.downloads
-            if(material.classificacao < 0)
+            if(material.classificacoes.length == 0)
                 td Por classificar 
             else 
-                td=material.classificacao
+                - let soma = 0
+                each classi in material.classificacoes 
+                   - soma += classi.pontuacao 
+                - var nota = soma / material.classificacoes.length 
+                td=nota
     .col-xs-12.col-sm-4.col-md-4.col-lg-4
         b
             span(style="color:#0074D9; margin-left: -15px") Classificar: 
