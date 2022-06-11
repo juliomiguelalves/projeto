@@ -28,7 +28,13 @@ router.get('/',function(req,res){
 router.get('/upload',function(req,res){
     var token = utils.unveilToken(req.cookies.token)
     if(token.nivel=="Produtor" || token.nivel=="Administrador"){
-      res.render('insertMaterial',{nivel:token.nivel})
+      axios.get("http://localhost:8001/materiais/tipos?token="+req.cookies.token)
+          .then(dados =>{
+            console.log(dados.data)
+            dados.data.forEach(d => console.log("d:"+d))
+            res.render('insertMaterial',{nivel:token.nivel,tipos:dados.data})
+          })
+          .catch(error =>res.render('error',{error}))
     }
     else{
       res.render('insertMaterial',{erro:"Acesso negado"})
@@ -197,7 +203,7 @@ router.post('/upload', upload.single('zip'), function(req, res) {
         var dataAtual = new Date().toISOString().substring(0,19)
 
         var material = {
-            tipo:req.body.titulo,
+            tipo:req.body.tipo,
             titulo: req.body.titulo,
             descricao: req.body.descricao,
             dataCriacao: req.body.dataCriacao,

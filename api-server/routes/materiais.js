@@ -3,17 +3,7 @@ var express = require('express');
 var jwt = require('jsonwebtoken')
 var router = express.Router();
 const Material = require('../controllers/material')
-
-//verifica o nivel de acesso
-
-function verificaNivel(autorizados,req,res,next){
-  if(autorizados.includes(n)){
-    next()
-  }
-  else {
-    res.status(403).jsonp({error:"Não tem nível de acesso suficiente"})
-  }
-}
+const TipoMaterial = require('../controllers/tipoMaterial')
 
 // Listar todas as materiais
 router.get('/', function(req, res) {
@@ -27,8 +17,25 @@ router.get('/', function(req, res) {
 // Inserir uma tarefa
 router.post('/', function(req, res){
   Material.inserir(req.body)
-    .then(dados => res.status(201).jsonp({dados: dados}))
+    .then(dados =>{ 
+      TipoMaterial.inserir(req.body.tipo)
+      .then(dados2 => {
+        res.status(201).jsonp({dados2})
+      })
+      .catch(e => {
+        res.status(501).jsonp({error: e})
+      })
+      })
     .catch(e => res.status(500).jsonp({error: e}))
+})
+
+router.get('/tipos',(req,res)=>{
+
+TipoMaterial.listar()
+        .then(dados => {console.log(dados);res.status(200).jsonp(dados)})
+        .catch(error => res.status(500).jsonp(error))
+
+
 })
 
 router.get('/download/:id',(req,res)=>{
