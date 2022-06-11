@@ -5,7 +5,6 @@ var axios = require('axios')
 
 router.get('/',function(req,res){
     if(req.cookies.token){
-        var noticias
         var token = utils.unveilToken(req.cookies.token)
         axios.get("http://localhost:8001/noticias?token="+req.cookies.token)
             .then(dados=>res.render('index',{nivel:token.nivel,noticias:dados.data,idUser:token._id}))

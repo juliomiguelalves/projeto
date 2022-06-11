@@ -76,9 +76,7 @@ router.put('/:id/classificar', function(req, res) {
       if (!dados) {
         Material.classificar(req.params.id, req.body)
           .then(dados => {res.status(201).jsonp({dados})
-            //Material.addClassificacoes(req.params.id,req.body)
-            //.then(dados => res.status(201).jsonp({dados}))
-            //.catch(e => res.status(500).jsonp({error: e}))
+            
           })
           .catch(e => res.status(500).jsonp({error: e}))
         

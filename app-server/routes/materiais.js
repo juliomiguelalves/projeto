@@ -27,11 +27,18 @@ router.get('/',function(req,res){
 
 router.get('/upload',function(req,res){
     var token = utils.unveilToken(req.cookies.token)
-    res.render('insertMaterial',{nivel:token.nivel})
+    if(token.nivel=="Produtor" || token.nivel=="Administrador"){
+      res.render('insertMaterial',{nivel:token.nivel})
+    }
+    else{
+      res.render('insertMaterial',{erro:"Acesso negado"})
+    }
     
 })
 
 router.post('/download/:id',(req,res) =>{
+  var token = utils.unveilToken(req.cookies.token)
+  if(token){
   var zips =[]
   axios.get('http://localhost:8001/materiais/download/'+req.params.id+'?token='+req.cookies.token)
       .then(materiais =>{
@@ -54,6 +61,10 @@ router.post('/download/:id',(req,res) =>{
           .catch(errors => res.render('error', {error:errors[0]}))
       })
       .catch(error => res.render('error',{error}))
+  }
+  else{
+    res.render('error',{error})
+  }
 })
 
 router.get('/remover/:id',function(req,res){
@@ -69,10 +80,10 @@ router.get('/remover/:id',function(req,res){
             axios.put('http://localhost:8001/noticias/'+req.params.id+'?token='+req.cookies.token,noticia)
             .then(res.redirect('/materiais'))
             .catch(error=>res.render('error',{error:error}))})
-            .catch(error=>res.render('error',{error:error}))
+          .catch(error=>res.render('error',{error:error}))
     }
     else{
-      res.render('error')
+      res.render('/materiais',{nivel:"IND"})
     }
     
 })
@@ -101,18 +112,21 @@ router.get('/:id',function(req,res){
 router.get('/:id/classificar/:pont', (req,res) => {
   
     var token = utils.unveilToken(req.cookies.token);
-
+    if(token){
     axios.put(`http://localhost:8001/materiais/${req.params.id}/classificar?token=${req.cookies.token}`,
       {user: token._id, pontuacao: Number.parseInt(req.params.pont)})
         .then(dados => res.redirect(req.headers.referer))
         .catch(error => res.render('error', {error}))
-    
+    }
+    else{
+      res.render('error',{error})
+    }
     
 })
 
 router.post('/:id/addComment',(req,res) =>{
   var token = utils.unveilToken(req.cookies.token);
-  if(token.nivel == "Produtor" | token.nivel == "Administrador"){
+  if(token.nivel == "Produtor" | token.nivel == "Administrador" || token.nivel == "Consumidor"){
     req.body["id_autor"] = token._id
     req.body["dataCriacao"] = new Date().toISOString().substring(0,19)
     req.body["nome_autor"] = token.nome
@@ -121,13 +135,9 @@ router.post('/:id/addComment',(req,res) =>{
           .catch(error => res.render('error', {error}))
   }
   else{
-    req.body["id_autor"] = "0"
-    req.body["dataCriacao"] = new Date().toISOString().substring(0,19)
-    req.body["nome_autor"] = "Convidado"
-    axios.post('http://localhost:8001/materiais/' + req.params.id + '/addComment?token=' + req.cookies.token, req.body)
-          .then(dados => res.redirect("/materiais/"+dados.data._id))
-          .catch(error => res.render('error', {error}))
+    res.render('error',{error})
   }
+  
 
 })
 
@@ -137,7 +147,6 @@ router.post('/upload', upload.single('zip'), function(req, res) {
     var token = utils.unveilToken(req.cookies.token)
     var zippath = (__dirname + req.file.path).replace("routes","").replace(/\\/g, "/")
     var extractpath = (__dirname + "uploads" ).replace("routes","").replace(/\\/g, "/")
-    console.log(zippath)
 
     if(token.nivel =="Administrador" || token.nivel=="Produtor"){
         var zip = new AdmZip(zippath);
@@ -205,7 +214,6 @@ router.post('/upload', upload.single('zip'), function(req, res) {
 
         axios.post("http://localhost:8001/materiais?token="+req.cookies.token,material)
           .then(dados => {
-            console.log("POSTEI O MATERIAL")
             var qnt = ficheiros.length
             var noticia = {
                 nomeAutor:token.nome,
@@ -217,11 +225,9 @@ router.post('/upload', upload.single('zip'), function(req, res) {
                 data:dataAtual
             }
             console.log(noticia)
-            console.log("INSTANCIOU A NOTICIA")
             axios.post("http://localhost:8001/noticias?token="+req.cookies.token,noticia)
                 .then(dados =>{ res.redirect('/materiais') })
                 .catch(error => res.render('error',{error}))
-            console.log("postei a noticia");
             })
           .catch(error => res.render('error',{error}))
         }

@@ -5,20 +5,50 @@ block content
     h2 Repositório de materiais didáticos
     .w3-bar
         a(href="/") Home
-    div(id="signup_modal")
-        div(class="signup_container")
-            .w3-container
-                h3 Introduza as suas credenciais: 
-            form.w3-container(action='/users/signup' method='POST')
-                label Nome: 
-                input.w3-input(type='text' name="nome")
-                label Nivel: 
-                select.w3-select(name="nivel")
-                    option(value="Administrador") Administrador
-                    option(value="Produtor") Produtor
-                    option(value="Consumidor") Consumidor    
-                label Email: 
-                input.w3-input(type='text' name="email")
-                label Password: 
-                input.w3-input(type='password' name="password")
-                input.w3-btn.w3-blue(type='submit' value="Enviar") 
+    if(editar)
+        div(id="signup_modal")
+            div(class="signup_container")
+                .w3-container
+                    h3 Introduza as suas credenciais: 
+                form.w3-container(action='/users/editar/'+editar._id method='POST')
+                    label Nome: 
+                    input.w3-input(type='text' name="nome" value=editar.nome)
+                    label Nivel: 
+                    select.w3-select(name="nivel")
+                        if(editar.nivel=="Administrador")
+                            option(value="Administrador" selected) Administrador
+                        else 
+                            option(value="Administrador" ) Administrador
+                        if(editar.nivel=="Produtor")
+                            option(value="Produtor" selected) Produtor
+                        else 
+                            option(value="Produtor" ) Produtor 
+                        if(editar.nivel=="Consumidor")
+                            option(value="Consumidor" selected) Consumidor
+                        else 
+                            option(value="Consumidor" ) Consumidor
+                    label Email: 
+                    input.w3-input(type='text' name="email" value=editar.email)
+                    label Password: 
+                    input.w3-input(type='password' name="password" value=editar.password)
+                    input.w3-btn.w3-blue(type='submit' value="Editar") 
+
+
+    else
+        div(id="signup_modal")
+            div(class="signup_container")
+                .w3-container
+                    h3 Introduza as suas credenciais: 
+                form.w3-container(action='/users/signup' method='POST')
+                    label Nome: 
+                    input.w3-input(type='text' name="nome")
+                    label Nivel: 
+                    select.w3-select(name="nivel")
+                        option(value="Administrador") Administrador
+                        option(value="Produtor") Produtor
+                        option(value="Consumidor") Consumidor    
+                    label Email: 
+                    input.w3-input(type='text' name="email")
+                    label Password: 
+                    input.w3-input(type='password' name="password")
+                    input.w3-btn.w3-blue(type='submit' value="Enviar") 

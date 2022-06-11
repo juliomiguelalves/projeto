@@ -13,6 +13,27 @@ router.get('/', function(req, res){
     .catch(e => res.status(500).jsonp({error: e}))
 })
 
+router.put('/:id',function(req,res){
+  console.log(req.body)
+  UserControl.editar(req.body)
+          .then(dados => {
+              console.log(dados)
+                jwt.sign({ email: dados.email, nivel: dados.nivel, _id:dados._id,nome:dados.nome,
+                  sub: 'RPCW2022'}, 
+                  "RPCW2022",
+                  {expiresIn: 3600},
+                  function(e, token) {
+                    if(e) res.status(500).jsonp({error: "Erro na geração do token: " + e}) 
+                    else res.status(201).jsonp({token: token})
+                    res.status(200).jsonp(dados)
+              });
+            })
+          .catch(error=>{
+            console.log(error)
+            res.status(500).jsonp({error: error})})
+            
+})
+
 router.post('/signup', passport.authenticate('signup-auth'), function(req, res) {
   console.log("SIGNUP:"+req.user)
   if (req.user.success) {

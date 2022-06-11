@@ -7,7 +7,6 @@ block content
         if(nivel=="Administrador")
             a(id="navbar_resources" href="/users" style="float: left") Utilizadores
         if(nivel=="Administrador" ||nivel=="Produtor" ||nivel=="Consumidor" )
-            a(style="float: left")=nivel
             a(href="/users/"+idUser style="float: left") Perfil
             a(href="/users/logout" style="float: right") Logout
             if(nivel=="Administrador")
@@ -16,42 +15,44 @@ block content
             a(id="navbar_signup" href='/users/signup' style = "cursor: pointer; float: right") Registo 
 
     if user
-        h1=user.dados.nome 
-            
-        p=user.dados.id 
-        p=user.dados.email 
-        p=user.dados.nivel 
+        h1 Informação pessoal
+        h3 Email: !{user.dados.email} 
+        h3 Nivel: !{user.dados.nivel}
+        
+        form(action=`/users/editar/`+user.dados._id method="GET" style="display: inline-block")
+                button.btn.btn-primary(type="submit") Editar
 
-        h2 Publicações:
-        if materiais
-            table(class="w3-table-all")
-                tr 
-                    th Tipo 
-                    th Titulo 
-                    th Data Criação 
-                    th Descrição 
-                    th id Autor 
-                    th Nome Autor
-                    th Classificação 
-                    th ficheiros 
-                    
-                each m in materiais 
+        if(user.dados.nivel !="Consumidor")
+            h2 Publicações:
+            if materiais
+                table(class="w3-table-all")
                     tr 
-                        td
-                            a(href="/materiais/"+m._id)=m.titulo 
-                        td=m.tipo 
-                        td=m.dataCriacao 
-                        td=m.descricao 
-                        td=m.idAutor 
-                        td=m.nomeAutor
-                        if(m.classificacao < 0)
-                            td Por classificar 
-                        else
-                            td=m.classificacao 
-                        td=m.ficheiros.length
-                        td 
-                            if(nivel=="Administrador")
-                                a(href=`/materiais/remover/${m._id}`) Remover
+                        th Tipo 
+                        th Titulo 
+                        th Data Criação 
+                        th Descrição 
+                        th id Autor 
+                        th Nome Autor
+                        th Classificação 
+                        th ficheiros 
+                        
+                    each m in materiais 
+                        tr 
+                            td
+                                a(href="/materiais/"+m._id)=m.titulo 
+                            td=m.tipo 
+                            td=m.dataCriacao 
+                            td=m.descricao 
+                            td=m.idAutor 
+                            td=m.nomeAutor
+                            if(m.classificacao < 0)
+                                td Por classificar 
+                            else
+                                td=m.classificacao 
+                            td=m.ficheiros.length
+                            td 
+                                if(nivel=="Administrador")
+                                    a(href=`/materiais/remover/${m._id}`) Remover
     else 
         h1 User não existente
 

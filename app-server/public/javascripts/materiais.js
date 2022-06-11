@@ -22,7 +22,7 @@ function adicionarFicheiro(nr, operacao) {
             $(`#linha${nr} .nome`).html(detalhes.name)
             $(`#linha${nr} .tamanho`).html(calcularTamanho(detalhes.size))
 
-            var preview = '<button type="button" class="resource-btn" onclick="mostrarPreviewNovo('+nr+')"> 👁 </button>'
+            var preview = '<button type="button" class="resource-btn"  onclick="mostrarPreviewNovo('+nr+')"> 👁 </button>'
             $(`#linha${nr} .preview`).html(preview)
 
             $(`#linha${nr} button.adicionar`).css("display","none")
@@ -71,8 +71,7 @@ function calcularTamanho(bytes) {
 
   function removerFicheiro(id, operacao) {
     var nrLinhas = $(`#ficheiros-${operacao} tr`).length - 2 //th's e linha de adicionar recursos
-    //if (nrLinhas == 1) window.alert('O recurso precisa de ter pelo menos 1 ficheiro!') 
-    //else {
+
         if (operacao == 'edicao') {
             var removerFicheiros = JSON.parse($('#removerFicheiros').val())
             removerFicheiros.push(id)
@@ -92,8 +91,6 @@ function previewFicheiro(nome, diretoria, tipo_mime){
         file = `<iframe src="${diretoria}" style="width:100%; height:100%"/>`;
     else if(tipo_mime=="application/xml")
         file = `<iframe type="text/html" src="${diretoria}" style="background:black;width:100%; height:100%"/>`;
-    else if(tipo_mime=="application/vnd.openxmlformats-officedocument.presentationml.presentation")
-        file = `<iframe type="text/html" src="https://docs.google.com/labnol.org/viewer?src=${diretoria}&embedded=true" style="background:black;width:100%; height:100%"/>`;
     else 
         file = '<p>' + nome + ', ' + tipo_mime + '<p>';
     
@@ -102,10 +99,46 @@ function previewFicheiro(nome, diretoria, tipo_mime){
     $('#preview_ficheiro').modal();
     
 }
+
+function mostrarPreviewNovo(nr) {
+    var ficheiro = $('#novoFicheiro'+nr)[0].files[0]
+    var html;
+    console.log(ficheiro)
+
+    if (ficheiro.type == 'image/png' || ficheiro.type == 'image/jpeg' || ficheiro.type == 'image/gif')
+        html = `<span class="helper"></span><img id="previewNovoFicheiro" src="" style="max-width:100%; max-height:100%; border: 10px solid #000"/>`;
+    else if (checkMimetype(ficheiro.type))
+        html = `<iframe id="previewNovoFicheiro" src="" style="width:100%; height:100%"/>`;
+    else if(tipo_mime=="application/xml")
+        file = `<iframe type="text/html" src="${diretoria}" style="background:black;width:100%; height:100%"/>`;
+    else 
+        html = '<p>' + ficheiro.name + ', ' + ficheiro.type + '<p>';
+        
+    $('#preview_ficheiro_form').empty();
+    $('#preview_ficheiro_form').append(html);
+
+    var reader = new FileReader();
+    reader.onload = function(e) { $('#previewNovoFicheiro').attr('src', e.target.result); }
+
+    reader.readAsDataURL(ficheiro); // convert to base64 string
+    $('#previewNovoFicheiro').css("display","inline-block")
+
+    $('#preview_ficheiro_form').modal();
+}
+
+
+
+
+
 function checkMimetype(type) {
     return Array.prototype.reduce.call(navigator.plugins, function (supported, plugin) {
         return supported || Array.prototype.reduce.call(plugin, function (supported, mime) {
             return supported || mime.type == type;
         }, supported);
     }, false);
+}
+
+function activatePopup(){
+    var popup = document.getElementById("mypopup")
+    popup.classList.toggle("show")
 }

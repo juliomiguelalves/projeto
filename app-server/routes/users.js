@@ -55,10 +55,18 @@ router.post('/login', function(req, res) {
       });
       res.redirect('/')
     })
-    .catch(error => res.render('error', {error}))
+    .catch(error => res.render('/login', {error:"Dados incorretos"}))
 });
 
-
+router.get('/editar/:id',function(req,res){
+  axios.get("http://localhost:8002/users/"+req.params.id)
+      .then(dados =>{
+        console.log(dados)
+        res.render('registo',{editar:dados.data.dados})
+      })
+      .catch(error=>res.render('error',{error}))
+  
+})
 router.get('/:id', function(req,res){
   var user
   var token = utils.unveilToken(req.cookies.token)
@@ -72,6 +80,23 @@ router.get('/:id', function(req,res){
         .catch(erro => res.render('user',{user:user}))
       })
       .catch(erro => res.render('error',{error:erro}))
+})
+
+router.post('/editar/:id',function(req,res){
+  var token = utils.unveilToken(req.cookies.token)
+
+  if (token.nivel == 'Administrador' || token._id == req.params.id) {
+    //var estatuto = {tipo: req.body.estatuto.charAt(0).toUpperCase() + req.body.estatuto.slice(1), filiacao: req.body.filiacao}
+    var fixed = {_id: req.params.id, nome: req.body.nome, nivel: req.body.nivel, email:req.body.email, password: req.body.password}
+    
+    axios.put('http://localhost:8002/users/' + req.params.id , fixed)
+      .then(dados => {
+        
+        res.redirect("/users/"+req.params.id)
+        })
+      .catch(error => res.render('error', {error}))
+  }
+  else res.redirect('/users/' + req.params.id)
 })
 
 module.exports = router;

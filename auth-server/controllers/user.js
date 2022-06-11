@@ -33,6 +33,6 @@ module.exports.removerPorID = function(id){
         .exec()
 }
 
-module.exports.alterar = function(u){
-    return User.findByIdAndUpdate({email: u.email}, u, {new: true})
+module.exports.editar = function(u){
+    return User.findByIdAndUpdate({_id: u._id}, u, {new: true})
 }
