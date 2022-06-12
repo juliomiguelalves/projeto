@@ -14,46 +14,50 @@ block content
             a(id="navbar_login" href='/users/login' style = "cursor: pointer; float: right") Login
             a(id="navbar_signup" href='/users/signup' style = "cursor: pointer; float: right") Registo 
 
-    if user
-        h1 Informação pessoal
-        h3 Email: !{user.dados.email} 
-        h3 Nivel: !{user.dados.nivel}
-        
-        form(action=`/users/editar/`+user.dados._id method="GET" style="display: inline-block")
-                button.btn.btn-primary(type="submit") Editar
-
-        if(user.dados.nivel !="Consumidor")
-            h2 Publicações:
-            if materiais
-                table(class="w3-table-all")
-                    tr 
-                        th Tipo 
-                        th Titulo 
-                        th Data Criação 
-                        th Descrição 
-                        th id Autor 
-                        th Nome Autor
-                        th Classificação 
-                        th ficheiros 
-                        
-                    each m in materiais 
+    body(style='background-image: url(/imagens/fundo.png);  background-repeat: no-repeat; background-size: 100% 100%; background-attachment: fixed;')
+        if user
+            div(style='text-align:center;')
+                h1 
+                    b Informação pessoal
+                img(src='https://museus.ulisboa.pt/sites/default/files/default-avatar_22.jpg' alt="user" style="heigth: 5%; width:5%; border-radius: 15px 15px 15px 15px;")
+                h3 Email: !{user.dados.email} 
+                h3 Nivel: !{user.dados.nivel}
+                form(action=`/users/editar/`+user.dados._id method="GET" style="display: inline-block")
+                    button.btn.btn-primary(type="submit") Editar
+               
+            if(user.dados.nivel !="Consumidor")
+                h2 Publicações:
+                if materiais
+                    table(class="w3-table-all")
                         tr 
-                            td
-                                a(href="/materiais/"+m._id)=m.titulo 
-                            td=m.tipo 
-                            td=m.dataCriacao 
-                            td=m.descricao 
-                            td=m.idAutor 
-                            td=m.nomeAutor
-                            if(m.classificacao < 0)
-                                td Por classificar 
-                            else
-                                td=m.classificacao 
-                            td=m.ficheiros.length
-                            td 
-                                if(nivel=="Administrador")
-                                    a(href=`/materiais/remover/${m._id}`) Remover
-    else 
-        h1 User não existente
+                            th Tipo 
+                            th Titulo 
+                            th Data Criação 
+                            th Descrição 
+                            th id Autor 
+                            th Nome Autor
+                            th Classificação 
+                            th ficheiros 
+                            th
+                            
+                        each m in materiais 
+                            tr 
+                                td
+                                    a(href="/materiais/"+m._id)=m.titulo 
+                                td=m.tipo 
+                                td=m.dataCriacao 
+                                td=m.descricao 
+                                td=m.idAutor 
+                                td=m.nomeAutor
+                                if(m.classificacao < 0)
+                                    td Por classificar 
+                                else
+                                    td=m.classificacao 
+                                td=m.ficheiros.length
+                                td 
+                                    if(nivel=="Administrador")
+                                        a(href=`/materiais/remover/${m._id}`) Remover
+        else 
+            h1 User não existente
 
                 

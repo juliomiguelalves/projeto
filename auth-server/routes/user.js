@@ -74,6 +74,12 @@ router.delete('/delete/:id', function(req, res){
 })
 
 
+router.get('/email/:email', function(req, res){
+  UserControl.consultar(req.params.email)
+    .then(dados => res.status(200).jsonp({dados: dados}))
+    .catch(e => res.status(500).jsonp({error: e}))
+})
+
 router.get('/:id', function(req, res){
   UserControl.listarPorID(req.params.id)
     .then(dados => res.status(200).jsonp({dados: dados}))

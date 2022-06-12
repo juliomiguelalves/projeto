@@ -16,9 +16,9 @@ module.exports.listarPorID = (id) => {
         .exec()
 }
 
-module.exports.consultar = mail => {
+module.exports.consultar = (email) => {
     return User
-        .findOne({email: mail})
+        .findOne({email: email})
         .exec()
 }
 

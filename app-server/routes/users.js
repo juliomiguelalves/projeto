@@ -55,7 +55,11 @@ router.post('/login', function(req, res) {
       });
       res.redirect('/')
     })
-    .catch(error => res.render('/login', {error:"Dados incorretos"}))
+    .catch(error => {
+      axios.get("http://localhost:8002/users/email/"+req.body.email)
+        .then(dados=> res.render('login-form', {mail: req.body.email, error:"Password incorreta!"}))
+        .catch(erro => res.render('login-form', {error:"Email incorreto!"}))
+    })
 });
 
 router.get('/editar/:id',function(req,res){

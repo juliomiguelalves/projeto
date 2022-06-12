@@ -120,6 +120,8 @@ router.get('/:id',function(req,res){
 
     axios.get('http://localhost:8001/materiais/'+req.params.id+'?token='+req.cookies.token)
         .then(dados=>{
+          console.log(dados.data)
+            res.render('material',{material:dados.data,nivel:token.nivel,idUser:token._id})
             var vis=0
             vis = dados.data.visualizacoes + 1
             var mat={

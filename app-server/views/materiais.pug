@@ -12,14 +12,10 @@ block content
         else
             a(id="navbar_login" href='/users/login' style = "cursor: pointer; float: right") Login
             a(id="navbar_signup" href='/users/signup' style = "cursor: pointer; float: right") Registo 
-
-    if nivel != "IND"
-        if(nivel=="Produtor" | nivel == "Administrador" )
-            form(action=`/materiais/upload` method="GET" style="display: inline-block")
-                    button.btn.btn-primary(type="submit") Adicionar
-        div(style="float:right" )
+    body(style='background-image: url(/imagens/fundo.png);  background-repeat: no-repeat; background-size: 100% 100%; background-attachment: fixed;')
+     if nivel != "IND"
+        div(style="float:left" )
             form(action=`/materiais/procurar` method="GET" style="display: inline-flex")
-                h4 Pesquisar:
                 select.w3-select(name="procurar"  class="w3-input w3-border w3-blue" style="width: 100px;")
                         option(value="tipo") Tipo
                         option(value="titulo") Titulo
@@ -36,6 +32,7 @@ block content
                 th Nome Autor
                 th Classificação 
                 th ficheiros 
+                th
                 
             each m in materiais 
                 tr 
@@ -58,7 +55,14 @@ block content
                     td 
                         if(nivel=="Administrador")
                             a(href=`/materiais/remover/${m._id}`) Remover
-    else 
-        a(href="/") Voltar
-        h1 Registe-se ou inicie sessão para aceder a esta página
+        if(nivel=="Produtor" | nivel == "Administrador" )
+            form(action=`/materiais/upload` method="GET" style="display: inline-block")
+                    button.btn.btn-primary(type="submit") +
+     else 
+        div(class="w3-panel")
+            h1(style='text-align: center; margin-top: 75px;') Para aceder a este conteúdo deve primeiro 
+                a(href='/users/signup') registar-se 
+                l ou fazer 
+                a(href='/users/login') login
+                l !
                             

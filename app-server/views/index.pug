@@ -14,22 +14,28 @@ block content
       a(id="navbar_signup" href='/users/signup' style = "cursor: pointer; float: right") Registo
     
   if noticias
-    h1 Notícias
-    if noticias.length > 0
-      ul
-        each n in noticias
-          if(n.existe==1)
-            li 
-              a(href='/users/'+ n.idAutor) !{n.nomeAutor} 
-              l publicou 
-              a(href='/materiais/'+ n.idMaterial) !{n.nomeRecurso}   
-              l em !{n.data} 
-          else 
-            li 
-              l Publicação 
-              b !{n.nomeRecurso} 
-              l de 
-              a(href='/users/'+ n.idAutor) !{n.nomeAutor} 
-              l foi removida em !{n.data}
-    else 
-      h2.center Não existem noticias para apresentar 
+    body(style='background-image: url(/imagens/fundo.png);  background-repeat: no-repeat; background-size: 100% 100%; background-attachment: fixed;')
+      h1(style='margin-left: 30px;')
+        b Notícias
+      if noticias.length > 0
+        ul
+          each n in noticias
+            if(n.existe==1)
+              li 
+                a(href='/users/'+ n.idAutor) !{n.nomeAutor} 
+                l publicou 
+                a(href='/materiais/'+ n.idMaterial) !{n.nomeRecurso}   
+                l em !{n.data} 
+            else 
+              li 
+                l Publicação 
+                b !{n.nomeRecurso} 
+                l de 
+                a(href='/users/'+ n.idAutor) !{n.nomeAutor} 
+                l foi removida em !{n.data}
+      else 
+        h2.center Não existem noticias para apresentar 
+
+  else 
+    body(style='background-image: url(https://www.lscph.org.au/wp-content/uploads/2020/02/Books.jpg);  background-repeat: no-repeat; background-size: 100% 100%; background-attachment: fixed;')
+      h1(style="text-align:center; color: orange; font-size:60px; margin-top: 75px") Repositório de Recursos Didáticos

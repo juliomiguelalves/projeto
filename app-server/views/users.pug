@@ -12,10 +12,12 @@ block content
         else
             a(id="navbar_login" href='/users/login' style = "cursor: pointer; float: right") Login
             a(id="navbar_signup" href='/users/signup' style = "cursor: pointer; float: right") Registo 
+    
+    body(style='background-image: url(/imagens/fundo.png);  background-repeat: no-repeat; background-size: 100% 100%; background-attachment: fixed;')
 
     if(nivel=="Administrador")
         if utilizadores 
-            h1 Lista de Utilizadores
+            h1(style='margin-left: 30px;') Lista de Utilizadores
             .w3-container.w3-margin
                 table.w3-table-all
                     tr
