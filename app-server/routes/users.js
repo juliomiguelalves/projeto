@@ -35,27 +35,37 @@ router.get('/logout', function(req, res) {
 router.post('/signup', function(req, res) {
   axios.post('http://localhost:8002/users/signup', req.body)
     .then(dados => {
+      if(dados.data.token){
       res.cookie('token', dados.data.token, {
         expires: new Date(Date.now() + '1d'),
         secure: false, // set to true if your using https
         httpOnly: true
       });
       res.redirect('/')
+    }
+    else{
+      res.render('registo', {error:"Dados incorretos"})
+    }
     })
-    .catch(error => res.render('error', {error}))
+    .catch(error => res.render('registo', {error:"Dados incorretos"}))
 });
 
 router.post('/login', function(req, res) {
   axios.post('http://localhost:8002/users/login', req.body)
     .then(dados => {
+      if(dados.data.token){
       res.cookie('token', dados.data.token, {
         expires: new Date(Date.now() + '1d'),
         secure: false, // set to true if your using https
         httpOnly: true
       });
       res.redirect('/')
+    }
+    else{
+      res.render('login-form', {error:"Dados incorretos"})
+    }
     })
-    .catch(error => res.render('/login', {error:"Dados incorretos"}))
+    .catch(error => res.render('login-form', {error:"Dados incorretos"}))
 });
 
 router.get('/editar/:id',function(req,res){
