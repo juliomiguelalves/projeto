@@ -7,7 +7,7 @@ block content
         if(nivel=="Administrador")
             a(id="navbar_resources" href="/users" style="float: left") Utilizadores
         if(nivel=="Administrador" ||nivel=="Produtor" ||nivel=="Consumidor" )
-            a(href="/users/"+idUser style="float: left") Perfil
+            a(href="/users/"+user.dados._id style="float: left") Perfil
             a(href="/users/logout" style="float: right") Logout
             if(nivel=="Administrador")
         else

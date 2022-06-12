@@ -19,8 +19,8 @@ router.post('/', function(req, res){
   Material.inserir(req.body)
     .then(dados =>{ 
       TipoMaterial.inserir(req.body.tipo)
-      .then(dados2 => {
-        res.status(201).jsonp({dados2})
+      .then(dados2=> {
+        res.status(201).jsonp({dados,dados2})
       })
       .catch(e => {
         res.status(501).jsonp({error: e})
@@ -31,11 +31,29 @@ router.post('/', function(req, res){
 
 router.get('/tipos',(req,res)=>{
 
-TipoMaterial.listar()
-        .then(dados => {console.log(dados);res.status(200).jsonp(dados)})
+        TipoMaterial.listar()
+        .then(dados => {res.status(200).jsonp(dados)})
         .catch(error => res.status(500).jsonp(error))
 
 
+})
+
+router.get('/tipo/:tipo',(req,res)=>{
+    Material.getTipo(req.params.tipo)
+          .then(dados => res.status(200).jsonp(dados))
+          .catch(error => res.status(500).jsonp(error))
+})
+
+router.get('/autor/:autor',(req,res)=>{
+  Material.getAutor(req.params.autor)
+        .then(dados => res.status(200).jsonp(dados))
+        .catch(error => res.status(500).jsonp(error))
+})
+
+router.get('/titulo/:titulo',(req,res)=>{
+  Material.getTitulo(req.params.titulo)
+        .then(dados => res.status(200).jsonp(dados))
+        .catch(error => res.status(500).jsonp(error))
 })
 
 router.get('/download/:id',(req,res)=>{
@@ -53,7 +71,7 @@ router.get('/:id', function(req, res) {
     .catch(e => res.status(500).jsonp({error: e}))
 });
 
-router.get('/autor/:id', function(req, res) {
+router.get('/user/:id', function(req, res) {
   Material.autor(req.params.id)
     .then(dados => res.status(200).jsonp(dados))
     .catch(e => res.status(500).jsonp({error: e}))
@@ -95,7 +113,6 @@ router.put('/:id/classificar', function(req, res) {
 
 router.post('/download/:id', function(req, res){
   var erros = []
-  console.log(req.params.id)
   Material.incrementarDownloads(req.params.id)
   .then(d => {})
   .catch(e => erros.push(e))

@@ -13,23 +13,19 @@ router.get('/', function(req, res) {
 
 
 router.post('/', function(req, res) {
-  console.log(req.body)
     Noticia.inserir(req.body)
       .then(dados => {
-        console.log(dados)
         res.status(200).jsonp(dados) })
       .catch(e => {
-        console.log(e)
         res.status(500).jsonp({error: e})})
   });
 
 router.put('/:id', function(req, res) {
-    Noticia.alterar(req.params.id,req.body)
+
+    Noticia.alterar(req.params.id,req.body.data)
       .then(dados => {
-        console.log(dados)
         res.status(200).jsonp(dados) })
       .catch(e => {
-        console.log(e)
         res.status(500).jsonp({error: e})})
   });
 

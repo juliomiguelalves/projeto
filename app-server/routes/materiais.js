@@ -14,7 +14,7 @@ router.get('/',function(req,res){
 
       axios.get('http://localhost:8001/materiais?token='+req.cookies.token)
           .then(dados=>{
-            res.render('materiais',{materiais:dados.data,nivel:token.nivel})
+            res.render('materiais',{materiais:dados.data,nivel:token.nivel,idUser:token._id})
           })
           .catch(error=>res.render('materiais',{nivel:"IND"}))
       }
@@ -25,14 +25,35 @@ router.get('/',function(req,res){
     
 })
 
+router.get('/procurar',function(req,res){
+    var token = utils.unveilToken(req.cookies.token)
+    texto=req.query.texto.trim()
+    if(token){
+      if(texto==""){
+        axios.get('http://localhost:8001/materiais?token='+req.cookies.token)
+        .then(dados=>{
+          res.render('materiais',{materiais:dados.data,nivel:token.nivel,idUser:token._id})
+        })
+        .catch(error=>res.render('materiais',{nivel:"IND"}))
+      }
+      else{
+        axios.get('http://localhost:8001/materiais/'+req.query.procurar+'/'+texto+'?token='+req.cookies.token)
+            .then(dados=>{
+              res.render('materiais',{materiais:dados.data,nivel:token.nivel,idUser:token._id})
+            })
+            .catch(error=>res.render('materiais',{nivel:"IND"}))
+          }
+      }
+     
+    })
+
+
 router.get('/upload',function(req,res){
     var token = utils.unveilToken(req.cookies.token)
     if(token.nivel=="Produtor" || token.nivel=="Administrador"){
       axios.get("http://localhost:8001/materiais/tipos?token="+req.cookies.token)
           .then(dados =>{
-            console.log(dados.data)
-            dados.data.forEach(d => console.log("d:"+d))
-            res.render('insertMaterial',{nivel:token.nivel,tipos:dados.data})
+            res.render('insertMaterial',{nivel:token.nivel,tipos:dados.data,idUser:token._id})
           })
           .catch(error =>res.render('error',{error}))
     }
@@ -65,6 +86,7 @@ router.post('/download/:id',(req,res) =>{
             res.end()
           })
           .catch(errors => res.render('error', {error:errors[0]}))
+        
       })
       .catch(error => res.render('error',{error}))
   }
@@ -80,11 +102,10 @@ router.get('/remover/:id',function(req,res){
     axios.delete('http://localhost:8001/materiais/remover/'+req.params.id+'?token='+req.cookies.token)
         .then(dados=>{
             var noticia = {
-            existe:0,
             data:dataAtual
             }
             axios.put('http://localhost:8001/noticias/'+req.params.id+'?token='+req.cookies.token,noticia)
-            .then(res.redirect('/materiais'))
+            .then(res.redirect(req.headers.referer))
             .catch(error=>res.render('error',{error:error}))})
           .catch(error=>res.render('error',{error:error}))
     }
@@ -99,8 +120,6 @@ router.get('/:id',function(req,res){
 
     axios.get('http://localhost:8001/materiais/'+req.params.id+'?token='+req.cookies.token)
         .then(dados=>{
-          console.log(dados.data)
-            res.render('material',{material:dados.data,nivel:token.nivel})
             var vis=0
             vis = dados.data.visualizacoes + 1
             var mat={
@@ -109,6 +128,8 @@ router.get('/:id',function(req,res){
             axios.put('http://localhost:8001/materiais/'+req.params.id+'?token='+req.cookies.token,mat)
             .then()
             .catch(error=>res.render('error',{error:error}))
+            res.render('material',{material:dados.data,nivel:token.nivel,idUser:token._id})
+
         })
         .catch(error=>res.render('error',{error:error}))
 
@@ -215,12 +236,10 @@ router.post('/upload', upload.single('zip'), function(req, res) {
             ficheiros: ficheiros
           }
           utils.clearZipFolder(extractpath,zippath)
-
-
-
         axios.post("http://localhost:8001/materiais?token="+req.cookies.token,material)
           .then(dados => {
             var qnt = ficheiros.length
+
             var noticia = {
                 nomeAutor:token.nome,
                 idAutor:token._id,
@@ -230,7 +249,6 @@ router.post('/upload', upload.single('zip'), function(req, res) {
                 existe:1,
                 data:dataAtual
             }
-            console.log(noticia)
             axios.post("http://localhost:8001/noticias?token="+req.cookies.token,noticia)
                 .then(dados =>{ res.redirect('/materiais') })
                 .catch(error => res.render('error',{error}))

@@ -8,7 +8,7 @@ router.get('/',function(req,res){
   var nivel
   var token = utils.unveilToken(req.cookies.token)
   axios.get("http://localhost:8002/users")
-      .then(dados=>res.render('users',{utilizadores:dados.data,nivel:token.nivel}))
+      .then(dados=>res.render('users',{utilizadores:dados.data,nivel:token.nivel,idUser:token._id}))
       .catch(erro => res.render('error',{error:erro}))
 })
 
@@ -61,8 +61,7 @@ router.post('/login', function(req, res) {
 router.get('/editar/:id',function(req,res){
   axios.get("http://localhost:8002/users/"+req.params.id)
       .then(dados =>{
-        console.log(dados)
-        res.render('registo',{editar:dados.data.dados})
+        res.render('registo',{editar:dados.data.dados,idUser:token._id})
       })
       .catch(error=>res.render('error',{error}))
   
@@ -73,9 +72,9 @@ router.get('/:id', function(req,res){
   axios.get("http://localhost:8002/users/"+req.params.id)
       .then(dados=>{
         user=dados.data
-        axios.get("http://localhost:8001/materiais/autor/"+req.params.id+'?token='+req.cookies.token)
+        axios.get("http://localhost:8001/materiais/user/"+req.params.id+'?token='+req.cookies.token)
         .then(dados=> {
-          res.render('user',{user:user,materiais:dados.data,nivel:token.nivel})
+          res.render('user',{user:user,materiais:dados.data,nivel:token.nivel,idUser:token._id})
         })
         .catch(erro => res.render('user',{user:user}))
       })

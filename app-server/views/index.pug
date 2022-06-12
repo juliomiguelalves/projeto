@@ -6,7 +6,7 @@ block content
     a(id="navbar_resources" href="/materiais" style="float: left") Materiais
     if(nivel=="Administrador")
       a(id="navbar_resources" href="/users" style="float: left") Utilizadores
-    if(nivel=="Administrador" ||nivel=="Produtor" ||nivel=="Consumidor" )
+    if(nivel=="Administrador" ||nivel=="Produtor" || nivel=="Consumidor" )
       a(href="/users/"+idUser style="float: left") Perfil
       a(href="/users/logout" style="float: right") Logout
     else
@@ -15,18 +15,21 @@ block content
     
   if noticias
     h1 Notícias
-    ul
-      each n in noticias
-        if(n.existe==1)
-          li 
-            a(href='/users/'+ n.idAutor) !{n.nomeAutor} 
-            l publicou 
-            a(href='/materiais/'+ n.idMaterial) !{n.nomeRecurso}   
-            l em !{n.data} 
-        else 
-          li 
-            l Publicação 
-            b !{n.nomeRecurso} 
-            l de 
-            a(href='/users/'+ n.idAutor) !{n.nomeAutor} 
-            l foi removida em !{n.data}
+    if noticias.length > 0
+      ul
+        each n in noticias
+          if(n.existe==1)
+            li 
+              a(href='/users/'+ n.idAutor) !{n.nomeAutor} 
+              l publicou 
+              a(href='/materiais/'+ n.idMaterial) !{n.nomeRecurso}   
+              l em !{n.data} 
+          else 
+            li 
+              l Publicação 
+              b !{n.nomeRecurso} 
+              l de 
+              a(href='/users/'+ n.idAutor) !{n.nomeAutor} 
+              l foi removida em !{n.data}
+    else 
+      h2.center Não existem noticias para apresentar 

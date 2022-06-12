@@ -75,3 +75,24 @@ module.exports.getFicheiros = (id) =>{
             .find({_id:id},{_id:0,ficheiros:1})
             .exec()
 }
+
+module.exports.getTipo = (t) =>{
+    return Material
+        .find({tipo:t})
+        .sort('-dataCriacao')
+        .exec()
+}
+
+module.exports.getAutor = (t) =>{
+    return Material
+        .find({nomeAutor:t})
+        .sort('-dataCriacao')
+        .exec()
+}
+
+module.exports.getTitulo = (t) =>{
+    return Material
+        .find({titulo:t})
+        .sort('-dataCriacao')
+        .exec()
+}

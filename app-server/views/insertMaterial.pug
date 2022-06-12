@@ -1,6 +1,18 @@
 extends layout 
 
 block content 
+    div(id="navbar" class="topnav")
+        a(href='/' style="float: left") Home
+        a(id="navbar_resources" href="/materiais" style="float: left") Materiais
+        if(nivel=="Administrador")
+            a(id="navbar_resources" href="/users" style="float: left") Utilizadores
+        if(nivel=="Administrador" ||nivel=="Produtor" ||nivel=="Consumidor" )
+            a(href="/users/"+idUser style="float: left") Perfil
+            a(href="/users/logout" style="float: right") Logout
+        else
+            a(id="navbar_login" href='/users/login' style = "cursor: pointer; float: right") Login
+            a(id="navbar_signup" href='/users/signup' style = "cursor: pointer; float: right") Registo 
+
     if erro 
         div(class="popup" onclick="activatePopup()")
             span(class="popuptext" id="myPopup")=erro

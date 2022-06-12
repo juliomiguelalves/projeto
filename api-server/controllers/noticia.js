@@ -14,6 +14,7 @@ module.exports.inserir = t => {
     return novo.save()
 }
 
-module.exports.alterar = function(id,t){
-    return Noticia.findOneAndUpdate({idMaterial: id}, t, {new: true})
+module.exports.alterar = function(id,data){
+    return Noticia.findOneAndUpdate({idMaterial: id}, 
+                                    {$set:{"existe":0,"data":data}}, {new: true, useFindAndModify: false})
 }

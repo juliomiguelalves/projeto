@@ -1,10 +1,31 @@
 extends layout 
 
 block content 
+    div(id="navbar" class="topnav")
+        a(href='/' style="float: left") Home
+        a(id="navbar_resources" href="/materiais" style="float: left") Materiais
+        if(nivel=="Administrador")
+            a(id="navbar_resources" href="/users" style="float: left") Utilizadores
+        if(nivel=="Administrador" ||nivel=="Produtor" ||nivel=="Consumidor" )
+            a(href="/users/"+idUser style="float: left") Perfil
+            a(href="/users/logout" style="float: right") Logout
+        else
+            a(id="navbar_login" href='/users/login' style = "cursor: pointer; float: right") Login
+            a(id="navbar_signup" href='/users/signup' style = "cursor: pointer; float: right") Registo 
+
     if nivel != "IND"
         if(nivel=="Produtor" | nivel == "Administrador" )
             form(action=`/materiais/upload` method="GET" style="display: inline-block")
                     button.btn.btn-primary(type="submit") Adicionar
+        div(style="float:right" )
+            form(action=`/materiais/procurar` method="GET" style="display: inline-flex")
+                h4 Pesquisar:
+                select.w3-select(name="procurar"  class="w3-input w3-border w3-blue" style="width: 100px;")
+                        option(value="tipo") Tipo
+                        option(value="titulo") Titulo
+                        option(value="autor") Autor
+                textarea(name="texto", cols="25", rows="1") 
+                button.btn.btn-primary(type="submit") Filtrar
         table(class="w3-table-all")
             tr 
                 th Titulo 
