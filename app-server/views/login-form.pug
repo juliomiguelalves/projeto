@@ -31,15 +31,3 @@ block content
     div(class="alert")
         span(class="closebtn" onclick="this.parentElement.style.display='none';") &times;
         strong !{error}! Por favor tente novamente!
-    
-  .w3-container.w3-margin.w3-border
-    .w3-container.w3-blue
-        h3 Introduza as suas credenciais:
-    form.w3-container(action='/users/login' method='POST')
-        label Email:
-        input.w3-input(type="text" name="email")
-        label Password:
-        input.w3-input(type="password" name="password")
-        input.w3-btn.w3-blue(type="submit" value="Enviar")
-    if error 
-        p=error

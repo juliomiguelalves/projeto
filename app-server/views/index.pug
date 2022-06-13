@@ -21,15 +21,15 @@ block content
         ul
           each n in noticias
             if(n.existe==1)
-              li 
+              li(style='font-size: 20px;') 
                 a(href='/users/'+ n.idAutor) !{n.nomeAutor} 
                 l publicou 
-                a(href='/materiais/'+ n.idMaterial) !{n.nomeRecurso}   
+                a(href='/materiais/'+ n.idMaterial) "!{n.nomeRecurso}"   
                 l em !{n.data} 
             else 
-              li 
+              li(style='font-size: 20px;') 
                 l Publicação 
-                b !{n.nomeRecurso} 
+                b "!{n.nomeRecurso}" 
                 l de 
                 a(href='/users/'+ n.idAutor) !{n.nomeAutor} 
                 l foi removida em !{n.data}

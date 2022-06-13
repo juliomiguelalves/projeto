@@ -60,25 +60,8 @@ block content
                         input.w3-input(type='text' name="email")
                         label Password: 
                         input.w3-input(type='password' name="password")
-                        input.w3-btn.w3-blue(type='submit' value="Enviar") 
-
-    else
-        div(id="signup_modal")
-            div(class="signup_container")
-                .w3-container
-                    h3 Introduza as suas credenciais: 
-                form.w3-container(action='/users/signup' method='POST')
-                    label Nome: 
-                    input.w3-input(type='text' name="nome")
-                    label Nivel: 
-                    select.w3-select(name="nivel")
-                        option(value="Administrador") Administrador
-                        option(value="Produtor") Produtor
-                        option(value="Consumidor") Consumidor    
-                    label Email: 
-                    input.w3-input(type='text' name="email")
-                    label Password: 
-                    input.w3-input(type='password' name="password")
-                    input.w3-btn.w3-blue(type='submit' value="Enviar") 
+                        input.w3-btn.w3-blue(type='submit' value="Enviar")  
             if error 
-                p=error
+                div(class="alert")
+                    span(class="closebtn" onclick="this.parentElement.style.display='none';") &times;
+                    strong Email já se encontra associado a outra conta! Por favor tente novamente!

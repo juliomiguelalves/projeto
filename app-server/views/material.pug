@@ -18,22 +18,34 @@ block content
         else
             a(id="navbar_login" href='/users/login' style = "cursor: pointer; float: right") Login
             a(id="navbar_signup" href='/users/signup' style = "cursor: pointer; float: right") Registo 
+    
+
+    body(style='background-image: url(/imagens/fundo.png);  background-repeat: no-repeat; background-size: 100% 100%; background-attachment: fixed;')
+
+    h1(style='margin-left: 30px;')=material.titulo
+
+    p(style='margin-left:45px;') 
+        b Descrição: 
+        l !{material.descricao}
 
     div(id="preview_ficheiro" class="modal")
-    table.table 
-        tr 
-            td Titulo 
-            td Tipo 
-            td Descricao 
-            td Data Criacao 
-            td Data Registo 
-            td Número de visualizações 
-            td Número de downloads
-            td Classificação
-        tr 
-            td=material.titulo 
+    h3(style='margin-top: 30px;margin-left: 30px;') Informações: 
+    table.table(class="w3-table-all w3-card-4" style='margin-left: 40px;width: 60%;') 
+        tr(style='height: 5px;')
+            td 
+                b Tipo 
+            td 
+                b Data Criacao 
+            td 
+                b Data Registo 
+            td 
+                b Número de visualizações 
+            td 
+                b Número de downloads
+            td 
+                b Classificação
+        tr(style='height: 5px;') 
             td=material.tipo 
-            td=material.descricao 
             td=material.dataCriacao 
             td=material.dataRegisto
             td=material.visualizacoes 
@@ -46,11 +58,30 @@ block content
                    - soma += classi.pontuacao 
                 - var nota = soma / material.classificacoes.length 
                 td=nota
+    h3(style='margin-top: 30px;margin-left: 30px;') Ficheiros:
+    table.table(class="w3-table-all w3-card-4" style='margin-left: 40px;width: 60%;')
+        tr(style='height: 5px;') 
+            td 
+                b Nome Ficheiro 
+            td 
+                b Tamanho 
+            td 
+                b Tipo 
+            td 
+                b Visualizar 
+        each m in material.ficheiros 
+            tr(style='height: 5px;') 
+                td=m.nomeFicheiro 
+                td=m.tamanho 
+                td=m.mimetype 
+                td
+                    button(type="button" class="resource-btn" onclick=`previewFicheiro("${m.nomeFicheiro}", "${m.diretoria}", "${m.mimetype}")`) 👁
+
     .col-xs-12.col-sm-4.col-md-4.col-lg-4
         b
-            span(style="color:#0074D9; margin-left: -15px") Classificar: 
-    .col-xs-12.col-sm-3.col-md-3.col-lg-3
-        div(class="stars rate" data-percent=`${material.classificacao}` style="margin-left: -550px; margin-top: 0px; margin-bottom: 0px")
+            span(style="color:#0074D9; margin-left: 25px;") Classificar: 
+    .col-xs-12.col-sm-3.col-md-3.col-lg-4
+        div(class="stars rate" data-percent=`${material.classificacao}` style="margin-left: -460px; margin-top: 0px; margin-bottom: 0px")
             a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/20#${material._id}` title="Horrível") ★
             a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/40#${material._id}` title="Decente") ★
             a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/60#${material._id}` title="Bom") ★
@@ -59,38 +90,32 @@ block content
     .col-xs-12.col-sm-1.col-md-1.col-lg-1
         form(action="/materiais/download/"+material._id method="POST")
             button.btn.btn-primary(id="submit_download" type="submit") Download
-    table.table 
-        tr 
-            td Nome Ficheiro 
-            td Tamanho 
-            td Tipo 
-            td Visualizar 
-        each m in material.ficheiros 
-            tr 
-                td=m.nomeFicheiro 
-                td=m.tamanho 
-                td=m.mimetype 
-                td
-                    button(type="button" class="resource-btn" onclick=`previewFicheiro("${m.nomeFicheiro}", "${m.diretoria}", "${m.mimetype}")`) 👁
 
-    ul.comments    
+    ul.comments   
         l.clearfix
-                    form(id="comentarPostForm" action='/materiais/'+ material._id+"/addComment" method="POST")
-                        textarea(id="commentPost" name="corpo" placeholder="Insira o seu comentário..." maxlength="255" style="height:120px; width:100%; resize: none")
-                        input(class="w3-right btn btn-primary" type="submit" id="commentButton" value="Comentar" style="margin")    
+            form(id="comentarPostForm" action='/materiais/'+ material._id+"/addComment" method="POST")
+                textarea(id="commentPost" name="corpo" placeholder="Insira o seu comentário..." maxlength="255" style="height:70px; width:50%; resize: none")
+                input(class="btn btn-primary" type="submit" id="commentButton" value="Comentar" style='margin-top:-20px;')
+
+        h3 Comentários:
         each c in material.comentarios
-             - dataTimeline = moment(new Date(c.dataCriacao)).locale('pt').fromNow() 
-             li.clearfix
-              .post-comments
-                     figcaption 
-                      a(href=`/users/${c.id_autor}`)
-                       b
-                        if material.id_autor == c.id_autor 
-                         | Eu 
-                        else 
-                         | #{c.nome_autor}
-                     p.meta
-                        | #{dataTimeline}:
-                        i.pull-right
-                     p 
-                        | #{c.corpo}
+            - dataTimeline = moment(new Date(c.dataCriacao)).locale('pt').fromNow() 
+            ul(class="w3-ul w3-card-4" style="width:97%;background: #E5E4E2;")
+                li(class="w3-bar" style='margin-left: 0px;')
+                    img(src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" class="w3-bar-item w3-circle" style="width:85px")
+                    div(class="w3-bar-item")
+                        span(class="w3-large")
+                            l
+                                a(href=`/users/${c.id_autor}`)
+                                    b
+                                        if material.id_autor == c.id_autor 
+                                            | Eu 
+                                        else 
+                                            | #{c.nome_autor} 
+                                l.meta(style='font-size: 15px;')
+                                    | #{dataTimeline}:
+                                    i.pull-right
+                        span  
+                            p
+                                b
+                                    | #{c.corpo}
