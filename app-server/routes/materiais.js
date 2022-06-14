@@ -117,6 +117,21 @@ router.get('/remover/:id',function(req,res){
     
 })
 
+router.get('/removerComment/:id',function(req,res){
+  var token = utils.unveilToken(req.cookies.token)
+  if(token.nivel == "Administrador"){
+  axios.delete('http://localhost:8001/materiais/removerComment/'+req.params.id+'?token='+req.cookies.token)
+      .then(dados=>{
+          res.redirect(req.headers.referer)
+        })
+        .catch(error=>res.render('error',{error:error})) 
+  }
+  else{
+    res.render('/materiais',{nivel:"IND"})
+  }
+  
+})
+
 router.get('/:id',function(req,res){
   var token = utils.unveilToken(req.cookies.token)
 

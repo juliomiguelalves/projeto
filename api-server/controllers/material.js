@@ -31,6 +31,10 @@ module.exports.remover = function(id){
     return Material.deleteOne({_id: id})
 }
 
+module.exports.removerComment = function(id){
+    return Material.deleteOne({_id: id})
+}
+
 module.exports.alterar = function(t){
     return Material.findByIdAndUpdate({_id: t._id}, t, {new: true})
 }

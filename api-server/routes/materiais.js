@@ -94,6 +94,13 @@ router.delete('/remover/:id', function(req,res){
   
 });
 
+router.delete('/removerComment/:id', function(req,res){
+  Material.removerComment(req.params.id)
+    .then(dados => {
+      res.status(200).jsonp(dados)})
+    .catch(e => res.status(500).jsonp({error: e}))
+});
+
 // Classificar um material
 router.put('/:id/classificar', function(req, res) {
   Material.atualizarClassificacao(req.params.id, req.body)
