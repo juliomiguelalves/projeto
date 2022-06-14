@@ -105,9 +105,11 @@ router.get('/remover/:id',function(req,res){
             data:dataAtual
             }
             axios.put('http://localhost:8001/noticias/'+req.params.id+'?token='+req.cookies.token,noticia)
-            .then(res.redirect(req.headers.referer))
-            .catch(error=>res.render('error',{error:error}))})
+            .then(res.redirect('/materiais'))
+            .catch(error=>res.render('error',{error:error}))
+          })
           .catch(error=>res.render('error',{error:error}))
+        
     }
     else{
       res.render('/materiais',{nivel:"IND"})

@@ -74,6 +74,7 @@ router.post('/login', function(req, res) {
 });
 
 router.get('/editar/:id',function(req,res){
+  var token = utils.unveilToken(req.cookies.token)
   axios.get("http://localhost:8002/users/"+req.params.id)
       .then(dados =>{
         res.render('registo',{editar:dados.data.dados,idUser:token._id})

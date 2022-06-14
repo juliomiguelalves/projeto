@@ -21,10 +21,13 @@ block content
     
 
     body(style='background-image: url(/imagens/fundo.png);  background-repeat: no-repeat; background-size: 100% 100%; background-attachment: fixed;')
-    .row
+    .row(style='margin-top: 20px; text-indent :2em;')
         h1(style='margin-left: 30px;margin-top : 0px')=material.titulo
         form(action="/materiais/download/"+material._id method="POST" style="height:10px")
             button.btn.btn-primary(id="submit_download" type="submit") Download
+        if(nivel=="Administrador")
+            form(action="/materiais/remover/"+material._id method="DELETE" style="height:10px")
+                button.btn.btn-danger(id="submit_delete" type="submit") Remover
 
     p(style='margin-left:45px;') 
         b Descrição: 
