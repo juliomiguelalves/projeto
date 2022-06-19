@@ -3,7 +3,6 @@ services:
   appserver:
     container_name: appserver
     image: juliomiguelalves/appserver:latest
-    build: .
     ports:
       - "8003:8003"
     depends_on:
@@ -13,7 +12,6 @@ services:
   apiserver:
     container_name: apiserver
     image: juliomiguelalves/api-server:latest
-    build: .
     ports:
       - "8001:8001"
     depends_on:
@@ -22,7 +20,6 @@ services:
   authserver:
     container_name: authserver
     image: juliomiguelalves/authserver:latest
-    build: .
     ports:
       - "8002:8002"
     depends_on:
