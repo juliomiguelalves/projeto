@@ -31,13 +31,19 @@ module.exports.remover = function(id){
     return Material.deleteOne({_id: id})
 }
 
-module.exports.removerComment = function(id){
-    return Material.deleteOne({_id: id})
+module.exports.removerComment = (matId,ComId) => {
+    return Material.findByIdAndUpdate({_id: matId},{$pull:{"comentarios" :{ "_id": ComId}}},{new:true})
+}
+
+module.exports.getComment = (matId,id) => {
+    return Material.findOne({_id:matId},{_id:0,comentarios:1})
 }
 
 module.exports.alterar = function(t){
     return Material.findByIdAndUpdate({_id: t._id}, t, {new: true})
 }
+
+
 
 module.exports.alterarPorID = function(id,t){
     return Material.findOneAndUpdate({_id: id}, t, {new: true})

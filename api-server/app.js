@@ -9,7 +9,7 @@ var noticiasRouter = require('./routes/noticias');
 
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/Repositorio', 
+mongoose.connect('mongodb://mongo:27017/Repositorio', 
       { useNewUrlParser: true,
         useUnifiedTopology: true,
         serverSelectionTimeoutMS: 5000});

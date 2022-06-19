@@ -7,7 +7,7 @@ router.get('/',function(req,res){
   var utilizadores
   var nivel
   var token = utils.unveilToken(req.cookies.token)
-  axios.get("http://localhost:8002/users")
+  axios.get("http://authserver:8002/users")
       .then(dados=>res.render('users',{utilizadores:dados.data,nivel:token.nivel,idUser:token._id}))
       .catch(erro => res.render('error',{error:erro}))
 })
@@ -21,7 +21,7 @@ router.get('/signup', function(req, res) {
 });
 
 router.get('/delete/:id', function(req, res) {
-  axios.delete('http://localhost:8002/users/delete/'+req.params.id)
+  axios.delete('http://authserver:8002/users/delete/'+req.params.id)
     .then(dados => res.redirect('/users'))
     .catch(error => res.render('error', {error}));
 });
@@ -33,7 +33,7 @@ router.get('/logout', function(req, res) {
 })
 
 router.post('/signup', function(req, res) {
-  axios.post('http://localhost:8002/users/signup', req.body)
+  axios.post('http://authserver:8002/users/signup', req.body)
     .then(dados => {
       if(dados.data.token){
       res.cookie('token', dados.data.token, {
@@ -45,13 +45,13 @@ router.post('/signup', function(req, res) {
     }
     else{
       res.render('registo', {error:"Dados incorretos"})
-    }
+  }
     })
-    .catch(error => res.render('registo', {error:"Dados incorretos"}))
+    .catch(error => {console.log(error.message);res.render('registo', {error:"Dados incorretos"})})
 });
 
 router.post('/login', function(req, res) {
-  axios.post('http://localhost:8002/users/login', req.body)
+  axios.post('http://authserver:8002/users/login', req.body)
     .then(dados => {
       if(dados.data.token){
       res.cookie('token', dados.data.token, {
@@ -66,7 +66,7 @@ router.post('/login', function(req, res) {
     }
     })
     .catch(error => {
-      axios.get("http://localhost:8002/users/email/"+req.body.email)
+      axios.get("http://authserver:8002/users/email/"+req.body.email)
         .then(dados=> res.render('login-form', {mail: req.body.email, error:"Password incorreta!"}))
         .catch(erro => res.render('login-form', {error:"Email incorreto!"}))
     })
@@ -75,7 +75,7 @@ router.post('/login', function(req, res) {
 
 router.get('/editar/:id',function(req,res){
   var token = utils.unveilToken(req.cookies.token)
-  axios.get("http://localhost:8002/users/"+req.params.id)
+  axios.get("http://authserver:8002/users/"+req.params.id)
       .then(dados =>{
         res.render('registo',{editar:dados.data.dados,idUser:token._id})
       })
@@ -85,10 +85,10 @@ router.get('/editar/:id',function(req,res){
 router.get('/:id', function(req,res){
   var user
   var token = utils.unveilToken(req.cookies.token)
-  axios.get("http://localhost:8002/users/"+req.params.id)
+  axios.get("http://authserver:8002/users/"+req.params.id)
       .then(dados=>{
         user=dados.data
-        axios.get("http://localhost:8001/materiais/user/"+req.params.id+'?token='+req.cookies.token)
+        axios.get("http://apiserver:8001/materiais/user/"+req.params.id+'?token='+req.cookies.token)
         .then(dados=> {
           res.render('user',{user:user,materiais:dados.data,nivel:token.nivel,idUser:token._id})
         })
@@ -104,7 +104,7 @@ router.post('/editar/:id',function(req,res){
     //var estatuto = {tipo: req.body.estatuto.charAt(0).toUpperCase() + req.body.estatuto.slice(1), filiacao: req.body.filiacao}
     var fixed = {_id: req.params.id, nome: req.body.nome, nivel: req.body.nivel, email:req.body.email, password: req.body.password}
     
-    axios.put('http://localhost:8002/users/' + req.params.id , fixed)
+    axios.put('http://authserver:8002/users/' + req.params.id , fixed)
       .then(dados => {
         
         res.redirect("/users/"+req.params.id)

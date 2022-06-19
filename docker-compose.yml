@@ -1,0 +1,44 @@
+version: "3"
+services:
+  appserver:
+    container_name: appserver
+    image: juliomiguelalves/appserver:latest
+    build: .
+    ports:
+      - "8003:8003"
+    depends_on:
+      - apiserver
+      - authserver
+    
+  apiserver:
+    container_name: apiserver
+    image: juliomiguelalves/api-server:latest
+    build: .
+    ports:
+      - "8001:8001"
+    depends_on:
+      - mongo
+    
+  authserver:
+    container_name: authserver
+    image: juliomiguelalves/authserver:latest
+    build: .
+    ports:
+      - "8002:8002"
+    depends_on:
+      - mongo
+    
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+volumes:
+ mongo:
+  
+
+
+    
+  

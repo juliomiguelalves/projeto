@@ -63,6 +63,19 @@ block content
                    - soma += classi.pontuacao 
                 - var nota = soma / material.classificacoes.length 
                 td=nota
+    div()
+        .col-xs-12.col-sm-4.col-md-4.col-lg-4
+            b
+                span(style="color:#0074D9; margin-left: 25px;") Classificar: 
+        .col-xs-12.col-sm-3.col-md-3.col-lg-4
+            div(class="stars rate" data-percent=`${material.classificacao}` style="margin-left: -460px; margin-top: 0px; margin-bottom: 0px")
+                a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/20#${material._id}` title="Horrível") ★
+                a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/40#${material._id}` title="Decente") ★
+                a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/60#${material._id}` title="Bom") ★
+                a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/80#${material._id}` title="Muito bom") ★
+                a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/100#${material._id}` title="Excelente") ★  
+    
+    br
     h3(style='margin-top: 30px;margin-left: 30px;') Ficheiros:
     table.table(class="w3-table-all w3-card-4" style='margin-left: 40px;width: 60%;')
         tr(style='height: 5px;') 
@@ -82,16 +95,6 @@ block content
                 td
                     button(type="button" class="resource-btn" onclick=`previewFicheiro("${m.nomeFicheiro}", "${m.diretoria}", "${m.mimetype}")`) 👁
 
-    .col-xs-12.col-sm-4.col-md-4.col-lg-4
-        b
-            span(style="color:#0074D9; margin-left: 25px;") Classificar: 
-    .col-xs-12.col-sm-3.col-md-3.col-lg-4
-        div(class="stars rate" data-percent=`${material.classificacao}` style="margin-left: -460px; margin-top: 0px; margin-bottom: 0px")
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/20#${material._id}` title="Horrível") ★
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/40#${material._id}` title="Decente") ★
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/60#${material._id}` title="Bom") ★
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/80#${material._id}` title="Muito bom") ★
-            a(class="classificarRecurso" href=`/materiais/${material._id}/classificar/100#${material._id}` title="Excelente") ★  
     
 
     ul.comments   
@@ -99,28 +102,29 @@ block content
             form(id="comentarPostForm" action='/materiais/'+ material._id+"/addComment" method="POST")
                 textarea(id="commentPost" name="corpo" placeholder="Insira o seu comentário..." maxlength="255" style="height:70px; width:50%; resize: none")
                 input(class="btn btn-primary" type="submit" id="commentButton" value="Comentar" style='margin-top:-20px;')
-
-        h3 Comentários:
-        each c in material.comentarios
-            - dataTimeline = moment(new Date(c.dataCriacao)).locale('pt').fromNow() 
-            ul(class="w3-ul w3-card-4" style="width:97%;background: #E5E4E2;")
-                li(class="w3-bar" style='margin-left: 0px;')
-                    if(nivel=="Admninistrador")
-                        span(onclick="/materiais/removerComment/"+c._id class="w3-bar-item w3-button w3-right") Apagar
-                    img(src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" class="w3-bar-item w3-circle" style="width:85px")
-                    div(class="w3-bar-item")
-                        span(class="w3-large")
-                            l
-                                a(href=`/users/${c.id_autor}`)
+            
+            h3 Comentários:
+            each c in material.comentarios
+                - dataTimeline = moment(new Date(c.dataCriacao)).locale('pt').fromNow() 
+                ul(class="w3-ul w3-card-4" style="width:97%;background: #E5E4E2;")
+                    li(class="w3-bar" style='margin-left: 0px;')
+                        if(nivel=="Administrador" || idUser == c.id_autor)
+                            form(action="/materiais/"+material._id+"/removerComment/"+c._id method="GET" class="w3-bar-item w3-button w3-right" )
+                                button.btn.btn-danger( type="submit") Apagar
+                        img(src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" class="w3-bar-item w3-circle" style="width:85px")
+                        div(class="w3-bar-item")
+                            span(class="w3-large")
+                                l
+                                    a(href=`/users/${c.id_autor}`)
+                                        b
+                                            if material.idAutor == c.id_autor 
+                                                | Eu 
+                                            else 
+                                                | #{c.nome_autor} 
+                                    l.meta(style='font-size: 15px;')
+                                        | #{dataTimeline}:
+                                        i.pull-right
+                            span  
+                                p
                                     b
-                                        if material.idAutor == c.id_autor 
-                                            | Eu 
-                                        else 
-                                            | #{c.nome_autor} 
-                                l.meta(style='font-size: 15px;')
-                                    | #{dataTimeline}:
-                                    i.pull-right
-                        span  
-                            p
-                                b
-                                    | #{c.corpo}
+                                        | #{c.corpo}

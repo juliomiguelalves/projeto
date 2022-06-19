@@ -82,5 +82,5 @@ function onError(error) {
  */
 
 function onListening() {
-  console.log('Servidor da API da lista de tarefas à escuta na porta ' + port + '...')
+  console.log('Servidor da API de dados à escuta na porta ' + port + '...')
 }

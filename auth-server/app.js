@@ -7,7 +7,7 @@ var LocalStrategy = require('passport-local').Strategy
 
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/Repositorio', 
+mongoose.connect('mongodb://mongo:27017/Repositorio', 
       { useNewUrlParser: true,
         useUnifiedTopology: true,
         serverSelectionTimeoutMS: 5000});
@@ -37,15 +37,12 @@ passport.use('login',new LocalStrategy(
 passport.use('signup-auth', new LocalStrategy(
   {usernameField: 'email', passReqToCallback: true}, 
   (req, email, password, done) => {
-    console.log(req.body)
     UserControl.consultar(email)
       .then(dados => {
-        console.log(dados)
         if (dados) return done(null, {strat: 'signup-auth', success: false, invalidInput: 'email', message: 'Email já existe!\n'})
         else {
           UserControl.inserir(req.body)
             .then(dados => {
-              console.log(dados)
               return done(null, {strat: 'signup-auth', success: true, user: dados})
             })
             .catch(e => done(e))

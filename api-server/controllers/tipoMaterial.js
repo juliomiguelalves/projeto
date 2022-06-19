@@ -12,6 +12,5 @@ module.exports.listar = () => {
 
 module.exports.inserir = tipo => {
     var novo = new MaterialTipo({tipo:tipo})
-    console.log(novo)
     return novo.save()
 }

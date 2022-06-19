@@ -14,10 +14,8 @@ router.get('/', function(req, res){
 })
 
 router.put('/:id',function(req,res){
-  console.log(req.body)
   UserControl.editar(req.body)
           .then(dados => {
-              console.log(dados)
                 jwt.sign({ email: dados.email, nivel: dados.nivel, _id:dados._id,nome:dados.nome,
                   sub: 'RPCW2022'}, 
                   "RPCW2022",
@@ -29,13 +27,11 @@ router.put('/:id',function(req,res){
               });
             })
           .catch(error=>{
-            console.log(error)
             res.status(500).jsonp({error: error})})
             
 })
 
 router.post('/signup', passport.authenticate('signup-auth'), function(req, res) {
-  console.log("SIGNUP:"+req.user)
   if (req.user.success) {
     jwt.sign({
       email: req.user.user.email, 
@@ -56,7 +52,6 @@ router.post('/signup', passport.authenticate('signup-auth'), function(req, res) 
 
   
 router.post('/login', passport.authenticate('login'), function(req, res){
-  console.log("LOGIN:"+req.user)
   jwt.sign({ email: req.user.email, nivel: req.user.nivel, _id:req.user._id,nome:req.user.nome,
     sub: 'RPCW2022'}, 
     "RPCW2022",

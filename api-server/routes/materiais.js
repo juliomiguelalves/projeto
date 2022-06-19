@@ -56,6 +56,7 @@ router.get('/titulo/:titulo',(req,res)=>{
         .catch(error => res.status(500).jsonp(error))
 })
 
+
 router.get('/download/:id',(req,res)=>{
     Material.getFicheiros(req.params.id)
       .then(dados => res.status(200).jsonp(dados))
@@ -94,11 +95,18 @@ router.delete('/remover/:id', function(req,res){
   
 });
 
-router.delete('/removerComment/:id', function(req,res){
-  Material.removerComment(req.params.id)
+router.get('/:matId/getComment/:id',(req,res)=>{
+  Material.getComment(req.params.matId,req.params.id)
+    .then(dados => res.status(200).jsonp(dados))
+    .catch(error => res.status(500).jsonp(error))
+})
+
+
+router.delete('/:matId/removerComment/:comId', function(req,res){
+  Material.removerComment(req.params.matId,req.params.comId)
     .then(dados => {
       res.status(200).jsonp(dados)})
-    .catch(e => res.status(500).jsonp({error: e}))
+    .catch(e => {console.log(e.message);res.status(500).jsonp({error: e})})
 });
 
 // Classificar um material
